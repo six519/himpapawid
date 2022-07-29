@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <SDL.h>
+#include <SDL_image.h>
 #include "misc.h"
+#include "sprite.h"
 #include "game.h"
 
 Game game;
+Sprite player;
 
 void exit_func()
 {
@@ -18,6 +21,7 @@ int main()
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
+	memset(&player, 0, sizeof(Sprite));
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -33,6 +37,11 @@ int main()
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
+	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+	player.x = 200;
+	player.y = 200;
+	player.texture = load_image("data/ship_1.png", game.renderer);
 
 	atexit(exit_func);
 
@@ -53,8 +62,9 @@ int main()
 			}
 		}
 
+		draw_image(player.texture, player.x, player.y, game.renderer);
 		SDL_RenderPresent(game.renderer);
-		SDL_Delay(10);
+		SDL_Delay(500);
 	}
 
 	return 0;
