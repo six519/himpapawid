@@ -23,9 +23,13 @@ Sprite bg;
 Sprite turbo1;
 Sprite turbo2;
 Sprite title;
+Sprite bg_title;
 Mix_Music *music;
 SDL_Event game_event;
 int first_frame;
+int loaded;
+int play_bg;
+int game_state;
 
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game);
 void handle_game();

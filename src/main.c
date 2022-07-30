@@ -13,9 +13,13 @@ Sprite bg;
 Sprite turbo1;
 Sprite turbo2;
 Sprite title;
+Sprite bg_title;
 Mix_Music *music;
 SDL_Event game_event;
 int first_frame;
+int loaded;
+int play_bg;
+int game_state;
 
 void exit_func()
 {
@@ -24,6 +28,7 @@ void exit_func()
 	SDL_DestroyTexture(turbo1.texture);
 	SDL_DestroyTexture(turbo2.texture);
 	SDL_DestroyTexture(title.texture);
+	SDL_DestroyTexture(bg_title.texture);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
 	SDL_Quit();
@@ -31,7 +36,9 @@ void exit_func()
 
 int main()
 {
-	int game_state = 0;
+	game_state = 0;
+	loaded = 0;
+	play_bg = 0;
 	first_frame = 1;
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
@@ -61,7 +68,6 @@ int main()
 	Mix_AllocateChannels(SND_CHANNEL);
 
 	init_game_music("data/bg.mp3");
-	Mix_PlayMusic(music, -1);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
@@ -74,16 +80,17 @@ int main()
 	init_image(&bg, game.renderer, 0, 0 - GAME_HEIGHT, "data/bg_1.png");
 	init_image(&turbo1, game.renderer, 0, 0, "data/turbo1.png");
 	init_image(&turbo2, game.renderer, 0, 0, "data/turbo2.png");
+	init_image(&bg_title, game.renderer, 0, 40, "data/bg_title.jpg");
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
-	title.x = (GAME_WIDTH / 2) - (title.w / 2);
+	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
 	title.y = (GAME_HEIGHT / 2) - (title.h / 2);
 
 	atexit(exit_func);
 
 	while(1)
 	{
-		SDL_SetRenderDrawColor(game.renderer, 127, 0, 255, 255); //violet
+		SDL_SetRenderDrawColor(game.renderer, 112, 176, 203, 255); //light blue
 		SDL_RenderClear(game.renderer);
 
 		switch (game_state)
@@ -98,6 +105,13 @@ int main()
 
 		SDL_RenderPresent(game.renderer);
 		SDL_Delay(18);
+		loaded = 1;
+
+		if (!play_bg)
+		{
+			Mix_PlayMusic(music, -1);
+			play_bg = 1;
+		}
 	}
 
 	return 0;

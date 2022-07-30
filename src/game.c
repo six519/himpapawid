@@ -9,11 +9,26 @@ void handle_title()
 			case SDL_QUIT:
 				exit(0);
 				break;
+			case SDL_KEYDOWN:
+					if (game_event.key.repeat == 0)
+					{
+						if (game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
+						{
+							game_state = 1;
+						}	
+					}
+				break;
 			default:
 				break;
 		}
 	}	
 
+	if (title.x < ((GAME_WIDTH / 2) - (title.w / 2)) && loaded)
+	{
+		title.x += 4;
+	}
+
+	draw_image(bg_title, game.renderer);
 	draw_image(title, game.renderer);
 }
 
