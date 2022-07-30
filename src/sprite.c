@@ -20,6 +20,13 @@ void draw_image(Sprite sprite, SDL_Renderer *renderer)
 	SDL_RenderCopy(renderer, sprite.texture, NULL, &dest);
 }
 
+SDL_Point get_image_size(Sprite sprite)
+{
+	SDL_Point size;
+	SDL_QueryTexture(sprite.texture, NULL, NULL, &size.x, &size.y);
+	return size;
+}
+
 void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *filename)
 {
 	memset(sprite, 0, sizeof(Sprite));
@@ -27,4 +34,7 @@ void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *file
 	sprite->y = y;
 	sprite->texture = load_image(filename, renderer);
 
+	SDL_Point pnt = get_image_size(*sprite);
+	sprite->w = pnt.x;
+	sprite->h = pnt.y;
 }

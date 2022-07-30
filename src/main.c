@@ -41,7 +41,10 @@ int main()
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
-	init_image(&player, game.renderer, 200,200, "data/ship_1.png");
+	init_image(&player, game.renderer, 0, 0, "data/ship_1.png");
+	player.x = (GAME_WIDTH / 2) - (player.w / 2);
+	player.y = GAME_HEIGHT - (player.h + 20);
+
 	init_image(&bg, game.renderer, 0, 0 - GAME_HEIGHT, "data/bg_1.png");
 
 	atexit(exit_func);
