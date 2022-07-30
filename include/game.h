@@ -22,11 +22,13 @@ Sprite player;
 Sprite bg;
 Sprite turbo1;
 Sprite turbo2;
+Sprite title;
 Mix_Music *music;
 SDL_Event game_event;
 int first_frame;
 
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game);
 void handle_game();
+void handle_title();
 
 #endif

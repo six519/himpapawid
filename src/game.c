@@ -1,5 +1,22 @@
 #include "game.h"
 
+void handle_title()
+{
+	while (SDL_PollEvent(&game_event))
+	{
+		switch (game_event.type)
+		{
+			case SDL_QUIT:
+				exit(0);
+				break;
+			default:
+				break;
+		}
+	}	
+
+	draw_image(title, game.renderer);
+}
+
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 {
 	if (event->repeat == 0)

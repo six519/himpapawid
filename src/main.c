@@ -12,6 +12,7 @@ Sprite player;
 Sprite bg;
 Sprite turbo1;
 Sprite turbo2;
+Sprite title;
 Mix_Music *music;
 SDL_Event game_event;
 int first_frame;
@@ -20,6 +21,9 @@ void exit_func()
 {
 	SDL_DestroyTexture(player.texture);
 	SDL_DestroyTexture(bg.texture);
+	SDL_DestroyTexture(turbo1.texture);
+	SDL_DestroyTexture(turbo2.texture);
+	SDL_DestroyTexture(title.texture);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
 	SDL_Quit();
@@ -71,6 +75,10 @@ int main()
 	init_image(&turbo1, game.renderer, 0, 0, "data/turbo1.png");
 	init_image(&turbo2, game.renderer, 0, 0, "data/turbo2.png");
 
+	init_image(&title, game.renderer, 0, 0, "data/title.png");
+	title.x = (GAME_WIDTH / 2) - (title.w / 2);
+	title.y = (GAME_HEIGHT / 2) - (title.h / 2);
+
 	atexit(exit_func);
 
 	while(1)
@@ -79,9 +87,12 @@ int main()
 		SDL_RenderClear(game.renderer);
 
 		switch (game_state)
-		{		
-		default:
+		{	
+		case 1:
 			handle_game();
+			break;	
+		default:
+			handle_title();
 			break;
 		}
 
