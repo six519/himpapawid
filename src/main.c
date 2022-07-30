@@ -10,6 +10,8 @@
 Game game;
 Sprite player;
 Sprite bg;
+Sprite turbo1;
+Sprite turbo2;
 Mix_Music *music;
 
 void exit_func()
@@ -31,6 +33,7 @@ int main()
 	game.down = 0;
 	game.left = 0;
 	game.right = 0;
+	int first_frame = 1;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -63,6 +66,8 @@ int main()
 	player.y = GAME_HEIGHT - (player.h + 20);
 
 	init_image(&bg, game.renderer, 0, 0 - GAME_HEIGHT, "data/bg_1.png");
+	init_image(&turbo1, game.renderer, 0, 0, "data/turbo1.png");
+	init_image(&turbo2, game.renderer, 0, 0, "data/turbo2.png");
 
 	atexit(exit_func);
 
@@ -112,6 +117,30 @@ int main()
 		draw_image(bg, game.renderer);
 		draw_image(player, game.renderer);
 
+		if (game.up || game.down || game.left || game.right)
+		{
+			if (first_frame)
+			{
+				turbo1.x = player.x + 7;
+				turbo1.y = player.y + player.h;
+				draw_image(turbo1, game.renderer);
+				turbo1.x += 26;
+				draw_image(turbo1, game.renderer);
+				turbo1.x -= 26;
+				first_frame = 0;
+			}
+			else
+			{
+				first_frame = 1;
+				turbo2.x = player.x + 7;
+				turbo2.y = player.y + player.h;
+				draw_image(turbo2, game.renderer);
+				turbo2.x += 26;
+				draw_image(turbo2, game.renderer);
+				turbo2.x -= 26;
+			}
+		}
+
 		if (bg.y == 0)
 		{
 			bg.y = 0 - GAME_HEIGHT;
@@ -119,7 +148,7 @@ int main()
 		bg.y = bg.y + 1;
 
 		SDL_RenderPresent(game.renderer);
-		SDL_Delay(12);
+		SDL_Delay(18);
 	}
 
 	return 0;
