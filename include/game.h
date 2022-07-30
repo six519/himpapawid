@@ -9,6 +9,12 @@ typedef struct
 {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
+	int up;
+	int down;
+	int left;
+	int right;
 } Game;
+
+void handle_key(SDL_KeyboardEvent *event, int value, Game *game);
 
 #endif

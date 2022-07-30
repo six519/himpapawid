@@ -24,6 +24,10 @@ int main()
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
+	game.up = 0;
+	game.down = 0;
+	game.left = 0;
+	game.right = 0;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -61,9 +65,35 @@ int main()
 				case SDL_QUIT:
 					return 0;
 					break;
+				case SDL_KEYDOWN:
+					handle_key(&game_event.key, 1, &game);
+					break;
+				case SDL_KEYUP:
+					handle_key(&game_event.key, 0, &game);
+					break;
 				default:
 					break;
 			}
+		}
+
+		if (game.up)
+		{
+			player.y -= 4;
+		}
+
+		if (game.down)
+		{
+			player.y += 4;
+		}
+
+		if (game.right)
+		{
+			player.x += 4;
+		}
+
+		if (game.left)
+		{
+			player.x -= 4;
 		}
 
 		draw_image(bg, game.renderer);
@@ -76,7 +106,7 @@ int main()
 		bg.y = bg.y + 1;
 
 		SDL_RenderPresent(game.renderer);
-		SDL_Delay(10);
+		SDL_Delay(12);
 	}
 
 	return 0;
