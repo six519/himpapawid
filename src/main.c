@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "misc.h"
 #include "sprite.h"
 #include "game.h"
+#include "sound.h"
 
 Game game;
 Sprite player;
 Sprite bg;
+Mix_Music *music;
 
 void exit_func()
 {
@@ -40,6 +43,16 @@ int main()
 	{
 		print_error("Unable to create window: %s.\n", SDL_GetError());
 	}
+
+	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048))
+	{
+		print_error("Unable to initialize Mixer: %s.\n", SDL_GetError());
+	}
+
+	Mix_AllocateChannels(SND_CHANNEL);
+
+	init_game_music("data/bg.mp3");
+	Mix_PlayMusic(music, -1);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
