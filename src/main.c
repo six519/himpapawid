@@ -13,6 +13,8 @@ Sprite bg;
 Sprite turbo1;
 Sprite turbo2;
 Mix_Music *music;
+SDL_Event game_event;
+int first_frame;
 
 void exit_func()
 {
@@ -25,7 +27,8 @@ void exit_func()
 
 int main()
 {
-	SDL_Event game_event;
+	int game_state = 0;
+	first_frame = 1;
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
@@ -33,7 +36,6 @@ int main()
 	game.down = 0;
 	game.left = 0;
 	game.right = 0;
-	int first_frame = 1;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -76,76 +78,12 @@ int main()
 		SDL_SetRenderDrawColor(game.renderer, 127, 0, 255, 255); //violet
 		SDL_RenderClear(game.renderer);
 
-		while (SDL_PollEvent(&game_event))
-		{
-			switch (game_event.type)
-			{
-				case SDL_QUIT:
-					return 0;
-					break;
-				case SDL_KEYDOWN:
-					handle_key(&game_event.key, 1, &game);
-					break;
-				case SDL_KEYUP:
-					handle_key(&game_event.key, 0, &game);
-					break;
-				default:
-					break;
-			}
+		switch (game_state)
+		{		
+		default:
+			handle_game();
+			break;
 		}
-
-		if (game.up)
-		{
-			player.y -= 4;
-		}
-
-		if (game.down)
-		{
-			player.y += 4;
-		}
-
-		if (game.right)
-		{
-			player.x += 4;
-		}
-
-		if (game.left)
-		{
-			player.x -= 4;
-		}
-
-		draw_image(bg, game.renderer);
-		draw_image(player, game.renderer);
-
-		if (game.up || game.down || game.left || game.right)
-		{
-			if (first_frame)
-			{
-				turbo1.x = player.x + 7;
-				turbo1.y = player.y + player.h;
-				draw_image(turbo1, game.renderer);
-				turbo1.x += 26;
-				draw_image(turbo1, game.renderer);
-				turbo1.x -= 26;
-				first_frame = 0;
-			}
-			else
-			{
-				first_frame = 1;
-				turbo2.x = player.x + 7;
-				turbo2.y = player.y + player.h;
-				draw_image(turbo2, game.renderer);
-				turbo2.x += 26;
-				draw_image(turbo2, game.renderer);
-				turbo2.x -= 26;
-			}
-		}
-
-		if (bg.y == 0)
-		{
-			bg.y = 0 - GAME_HEIGHT;
-		}
-		bg.y = bg.y + 1;
 
 		SDL_RenderPresent(game.renderer);
 		SDL_Delay(18);
