@@ -10,6 +10,7 @@ typedef struct
 } Sprite;
 
 SDL_Texture *load_image(char *filename, SDL_Renderer *renderer);
-void draw_image(SDL_Texture *texture, int x, int y, SDL_Renderer *renderer);
+void draw_image(Sprite sprite, SDL_Renderer *renderer);
+void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *filename);
 
 #endif

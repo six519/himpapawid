@@ -11,11 +11,20 @@ SDL_Texture *load_image(char *filename, SDL_Renderer *renderer)
 	return texture;
 }
 
-void draw_image(SDL_Texture *texture, int x, int y, SDL_Renderer *renderer)
+void draw_image(Sprite sprite, SDL_Renderer *renderer)
 {
 	SDL_Rect dest;
-	dest.x = x;
-	dest.y = y;
-	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
-	SDL_RenderCopy(renderer, texture, NULL, &dest);
+	dest.x = sprite.x;
+	dest.y = sprite.y;
+	SDL_QueryTexture(sprite.texture, NULL, NULL, &dest.w, &dest.h);
+	SDL_RenderCopy(renderer, sprite.texture, NULL, &dest);
+}
+
+void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *filename)
+{
+	memset(sprite, 0, sizeof(Sprite));
+	sprite->x = x;
+	sprite->y = y;
+	sprite->texture = load_image(filename, renderer);
+
 }

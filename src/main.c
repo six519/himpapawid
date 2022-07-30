@@ -7,9 +7,12 @@
 
 Game game;
 Sprite player;
+Sprite bg;
 
 void exit_func()
 {
+	SDL_DestroyTexture(player.texture);
+	SDL_DestroyTexture(bg.texture);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
 	SDL_Quit();
@@ -21,7 +24,6 @@ int main()
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
-	memset(&player, 0, sizeof(Sprite));
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -39,9 +41,8 @@ int main()
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
-	player.x = 200;
-	player.y = 200;
-	player.texture = load_image("data/ship_1.png", game.renderer);
+	init_image(&player, game.renderer, 200,200, "data/ship_1.png");
+	init_image(&bg, game.renderer, 0, 0 - GAME_HEIGHT, "data/bg_1.png");
 
 	atexit(exit_func);
 
@@ -62,9 +63,17 @@ int main()
 			}
 		}
 
-		draw_image(player.texture, player.x, player.y, game.renderer);
+		draw_image(bg, game.renderer);
+		draw_image(player, game.renderer);
+
+		if (bg.y == 0)
+		{
+			bg.y = 0 - GAME_HEIGHT;
+		}
+		bg.y = bg.y + 1;
+
 		SDL_RenderPresent(game.renderer);
-		SDL_Delay(500);
+		SDL_Delay(10);
 	}
 
 	return 0;
