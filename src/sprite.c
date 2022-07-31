@@ -20,6 +20,17 @@ void draw_image(Sprite sprite, SDL_Renderer *renderer)
 	SDL_RenderCopy(renderer, sprite.texture, NULL, &dest);
 }
 
+void draw_image_scale(Sprite sprite, SDL_Renderer *renderer, int w,  int h)
+{
+	SDL_Rect dest;
+	dest.x = sprite.x;
+	dest.y = sprite.y;
+	dest.w = w;
+	dest.h = h;
+
+	SDL_RenderCopy(renderer, sprite.texture, NULL, &dest);
+}
+
 SDL_Point get_image_size(Sprite sprite)
 {
 	SDL_Point size;
