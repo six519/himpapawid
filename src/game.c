@@ -32,6 +32,17 @@ void handle_title()
 	draw_image(title, game.renderer);
 }
 
+void generate_missile()
+{
+	struct Missile *miss;
+	miss = malloc(sizeof(struct Missile));
+	memset(miss, 0, sizeof(struct Missile));
+	game.missile_tail->next = miss;
+	game.missile_tail = miss;
+	miss->x = player.x + 20;
+	miss->y = player.y;
+}
+
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 {
 	if (event->repeat == 0)
@@ -55,11 +66,17 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 		{
 			game->right = value;
 		}
+
+		if (game_event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+		{
+			game->firing = value;
+		}
 	}
 }
 
 void handle_game()
 {
+	struct Missile *m, *prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -75,6 +92,15 @@ void handle_game()
 				break;
 			default:
 				break;
+		}
+	}
+
+	if (game.firing)
+	{
+		if (missile_can_spawn)
+		{
+			missile_can_spawn = 0;
+			generate_missile();
 		}
 	}
 
@@ -130,4 +156,41 @@ void handle_game()
 		bg.y = 0 - GAME_HEIGHT;
 	}
 	bg.y = bg.y + 1;
+
+	if (missile_spawn_speed == MISSILE_SPAWN_SPEED)
+	{
+		missile_spawn_speed = 0;
+		missile_can_spawn = 1;
+	}
+
+	missile_spawn_speed += 1;
+
+	prev = &game.missile_head;
+
+	for (m = game.missile_head.next ; m != NULL ; m = m->next)
+	{
+		m->y -= 8;
+
+		if (m->y < (0 - missile.h))
+		{
+			if (m == game.missile_tail)
+			{
+				game.missile_tail = prev;
+			}
+
+			prev->next = m->next;
+			free(m);
+			m = prev;
+		}
+
+		prev = m;
+	}
+
+	for (m = game.missile_head.next ; m != NULL ; m = m->next)
+	{
+		missile.x = m->x;
+		missile.y = m->y;
+		draw_image(missile, game.renderer);
+	}
+
 }
