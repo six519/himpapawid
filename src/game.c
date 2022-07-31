@@ -109,7 +109,7 @@ void handle_game()
 	{
 		if (player.y > 0)
 		{
-			player.y -= 4;
+			player.y -= PLAYER_SPEED;
 		}
 	}
 
@@ -117,7 +117,7 @@ void handle_game()
 	{
 		if (player.y < (GAME_HEIGHT - player.h))
 		{
-			player.y += 4;
+			player.y += PLAYER_SPEED;
 		}
 	}
 
@@ -125,7 +125,7 @@ void handle_game()
 	{
 		if (player.x < GAME_WIDTH - player.w)
 		{
-			player.x += 4;
+			player.x += PLAYER_SPEED;
 		}
 	}
 
@@ -133,7 +133,7 @@ void handle_game()
 	{
 		if (player.x > 0)
 		{
-			player.x -= 4;
+			player.x -= PLAYER_SPEED;
 		}
 	}
 
@@ -182,7 +182,7 @@ void handle_game()
 
 	for (m = game.missile_head.next ; m != NULL ; m = m->next)
 	{
-		m->y -= 8;
+		m->y -= MISSILE_SPEED;
 
 		if (m->y < (0 - missile.h))
 		{

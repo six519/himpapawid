@@ -8,6 +8,8 @@
 #define GAME_HEIGHT 720
 #define MISSILE_SPAWN_SPEED 20
 #define SND_CHANNEL 4
+#define MISSILE_SPEED 8
+#define PLAYER_SPEED 4
 
 struct Missile
 {
