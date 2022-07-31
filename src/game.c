@@ -101,6 +101,7 @@ void handle_game()
 		{
 			missile_can_spawn = 0;
 			generate_missile();
+			Mix_PlayChannel(0, shot, 0);
 		}
 	}
 

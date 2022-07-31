@@ -5,7 +5,6 @@
 #include "misc.h"
 #include "sprite.h"
 #include "game.h"
-#include "sound.h"
 
 Game game;
 Sprite player;
@@ -16,6 +15,7 @@ Sprite title;
 Sprite bg_title;
 Sprite missile;
 Mix_Music *music;
+Mix_Chunk *shot;
 SDL_Event game_event;
 int first_frame;
 int loaded;
@@ -74,7 +74,8 @@ int main()
 
 	Mix_AllocateChannels(SND_CHANNEL);
 
-	init_game_music("data/bg.mp3");
+	music = Mix_LoadMUS("data/bg.mp3");
+	shot = Mix_LoadWAV("data/shot.wav");
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);

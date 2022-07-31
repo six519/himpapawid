@@ -7,6 +7,7 @@
 #define GAME_WIDTH 576
 #define GAME_HEIGHT 720
 #define MISSILE_SPAWN_SPEED 20
+#define SND_CHANNEL 4
 
 struct Missile
 {
@@ -36,6 +37,7 @@ Sprite title;
 Sprite bg_title;
 Sprite missile;
 Mix_Music *music;
+Mix_Chunk *shot;
 SDL_Event game_event;
 int first_frame;
 int loaded;
