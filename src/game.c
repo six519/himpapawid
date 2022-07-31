@@ -107,22 +107,34 @@ void handle_game()
 
 	if (game.up)
 	{
-		player.y -= 4;
+		if (player.y > 0)
+		{
+			player.y -= 4;
+		}
 	}
 
 	if (game.down)
 	{
-		player.y += 4;
+		if (player.y < (GAME_HEIGHT - player.h))
+		{
+			player.y += 4;
+		}
 	}
 
 	if (game.right)
 	{
-		player.x += 4;
+		if (player.x < GAME_WIDTH - player.w)
+		{
+			player.x += 4;
+		}
 	}
 
 	if (game.left)
 	{
-		player.x -= 4;
+		if (player.x > 0)
+		{
+			player.x -= 4;
+		}
 	}
 
 	draw_image(bg, game.renderer);
