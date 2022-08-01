@@ -295,4 +295,23 @@ void handle_game()
 		}
 	}
 
+	score_text = get_font_texture("Score: 0");
+	lives_text = get_font_texture("Lives: ");
+	draw_text(score_text, 10, 5);
+	draw_text(lives_text, 10, 30);
+}
+
+SDL_Texture *get_font_texture(char *txt)
+{
+	SDL_Surface *surface;
+	SDL_Texture *texture;
+	SDL_Color color;
+	color.r = 255;
+	color.g = 255;
+	color.b = 255;
+	color.a = 255;
+	surface = TTF_RenderUTF8_Blended(font, txt, color);
+	texture = SDL_CreateTextureFromSurface(game.renderer, surface);
+	SDL_FreeSurface(surface);
+	return texture;
 }

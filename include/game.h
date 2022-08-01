@@ -2,6 +2,7 @@
 #define _GAME_H_
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "sprite.h"
 #include "misc.h"
 
@@ -49,6 +50,9 @@ Sprite nep;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
+TTF_Font *font;
+SDL_Texture *score_text;
+SDL_Texture *lives_text;
 int first_frame;
 int loaded;
 int play_bg;
@@ -65,5 +69,6 @@ void generate_missile();
 void generate_rock(int x, int y);
 void generate_rocks();
 void reset_nep();
+SDL_Texture *get_font_texture(char *txt);
 
 #endif

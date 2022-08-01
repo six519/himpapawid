@@ -20,6 +20,15 @@ void draw_image(Sprite sprite, SDL_Renderer *renderer)
 	SDL_RenderCopy(renderer, sprite.texture, NULL, &dest);
 }
 
+void draw_text(SDL_Texture *texture, int x, int y)
+{
+	SDL_Rect dest;
+	dest.x = x;
+	dest.y = y;
+	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+	SDL_RenderCopy(game.renderer, texture, NULL, &dest);
+}
+
 void draw_image_scale(Sprite sprite, SDL_Renderer *renderer, int w,  int h)
 {
 	SDL_Rect dest;

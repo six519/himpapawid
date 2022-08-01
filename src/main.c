@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "misc.h"
 #include "sprite.h"
 #include "game.h"
@@ -19,7 +20,10 @@ Sprite rock;
 Sprite nep;
 Mix_Music *music;
 Mix_Chunk *shot;
+TTF_Font *font;
 SDL_Event game_event;
+SDL_Texture *score_text;
+SDL_Texture *lives_text;
 int first_frame;
 int loaded;
 int play_bg;
@@ -40,8 +44,11 @@ void exit_func()
 	SDL_DestroyTexture(missile.texture);
 	SDL_DestroyTexture(rock.texture);
 	SDL_DestroyTexture(nep.texture);
+	SDL_DestroyTexture(score_text);
+	SDL_DestroyTexture(lives_text);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -81,6 +88,12 @@ int main()
 	{
 		print_error("Unable to initialize Mixer: %s.\n", SDL_GetError());
 	}
+
+	if (TTF_Init() < 0)
+	{
+		print_error("Unable to initialize TTF: %s.\n", SDL_GetError());
+	}
+	font = TTF_OpenFont("data/tandy.ttf", 25);
 
 	Mix_AllocateChannels(SND_CHANNEL);
 

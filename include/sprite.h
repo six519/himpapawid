@@ -16,5 +16,6 @@ void draw_image(Sprite sprite, SDL_Renderer *renderer);
 void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *filename);
 void draw_image_scale(Sprite sprite, SDL_Renderer *renderer, int w,  int h);
 SDL_Point get_image_size(Sprite sprite);
+void draw_text(SDL_Texture *texture, int x, int y);
 
 #endif
