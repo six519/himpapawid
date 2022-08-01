@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
@@ -40,6 +41,7 @@ void exit_func()
 
 int main()
 {
+	srand(time(NULL));
 	game_state = 0;
 	loaded = 0;
 	play_bg = 0;
