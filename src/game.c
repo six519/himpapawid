@@ -34,9 +34,9 @@ void handle_title()
 
 void generate_missile()
 {
-	struct Missile *miss;
-	miss = malloc(sizeof(struct Missile));
-	memset(miss, 0, sizeof(struct Missile));
+	struct Object *miss;
+	miss = malloc(sizeof(struct Object));
+	memset(miss, 0, sizeof(struct Object));
 	game.missile_tail->next = miss;
 	game.missile_tail = miss;
 	miss->x = player.x + 20;
@@ -76,7 +76,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Missile *m, *prev;
+	struct Object *m, *prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)

@@ -11,11 +11,11 @@
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
 
-struct Missile
+struct Object
 {
 	int x;
 	int y;
-	struct Missile *next;
+	struct Object *next;
 };
 
 typedef struct
@@ -27,7 +27,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Missile missile_head, *missile_tail;
+	struct Object missile_head, *missile_tail;
 } Game;
 
 Game game;
