@@ -24,6 +24,7 @@ Mix_Chunk *shot;
 TTF_Font *font;
 SDL_Event game_event;
 SDL_Texture *score_text;
+SDL_Texture *score_value_text;
 SDL_Texture *lives_text;
 int first_frame;
 int loaded;
@@ -49,6 +50,7 @@ void exit_func()
 	SDL_DestroyTexture(nep.texture);
 	SDL_DestroyTexture(rocket.texture);
 	SDL_DestroyTexture(score_text);
+	SDL_DestroyTexture(score_value_text);
 	SDL_DestroyTexture(lives_text);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);

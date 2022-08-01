@@ -1,5 +1,6 @@
 #ifndef _GAME_H_
 #define _GAME_H_
+#include <stdio.h>
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
@@ -54,6 +55,7 @@ SDL_Event game_event;
 TTF_Font *font;
 SDL_Texture *score_text;
 SDL_Texture *lives_text;
+SDL_Texture *score_value_text;
 int first_frame;
 int loaded;
 int play_bg;

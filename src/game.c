@@ -295,10 +295,15 @@ void handle_game()
 		}
 	}
 
-	score_text = get_font_texture("Score: 0");
+	score_text = get_font_texture("Score:");
+	char *str = malloc(10);
+	sprintf(str, "%d", score);
+	score_value_text = get_font_texture(str);
 	lives_text = get_font_texture("Lives: ");
 	draw_text(score_text, 10, 5);
+	draw_text(score_value_text, 100, 5);
 	draw_text(lives_text, 10, 30);
+	free(str);
 
 	rocket.x = 100;
 	rocket.y = 43;
