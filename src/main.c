@@ -16,6 +16,7 @@ Sprite title;
 Sprite bg_title;
 Sprite missile;
 Sprite rock;
+Sprite nep;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -38,6 +39,7 @@ void exit_func()
 	SDL_DestroyTexture(bg_title.texture);
 	SDL_DestroyTexture(missile.texture);
 	SDL_DestroyTexture(rock.texture);
+	SDL_DestroyTexture(nep.texture);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
 	SDL_Quit();
@@ -98,6 +100,7 @@ int main()
 	init_image(&turbo2, game.renderer, 0, 0, "data/turbo2.png");
 	init_image(&bg_title, game.renderer, 0, 40, "data/bg_title.jpg");
 	init_image(&rock, game.renderer, 0, 0, "data/rock.png");
+	init_image(&nep, game.renderer, 0, 0, "data/nep.png");
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
@@ -112,6 +115,7 @@ int main()
 	SDL_Point ls = get_image_size(rock);
 
 	generate_rocks();
+	reset_nep();
 
 	while(1)
 	{

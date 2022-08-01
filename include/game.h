@@ -9,11 +9,12 @@
 #define GAME_HEIGHT 720
 #define BG_SPEED 3
 #define MISSILE_SPAWN_SPEED 20
-#define LAVA_SPAWN_SPEED 65
+#define ROCK_SPAWN_SPEED 65
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
-#define LAVA_SPEED 1
+#define ROCK_SPEED 2
+#define NEP_SPEED 1
 
 struct Object
 {
@@ -44,6 +45,7 @@ Sprite title;
 Sprite bg_title;
 Sprite missile;
 Sprite rock;
+Sprite nep;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -62,5 +64,6 @@ void handle_title();
 void generate_missile();
 void generate_rock(int x, int y);
 void generate_rocks();
+void reset_nep();
 
 #endif

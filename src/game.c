@@ -59,6 +59,12 @@ void generate_missile()
 	miss->y = player.y;
 }
 
+void reset_nep()
+{
+	nep.x = generate_random_number(-100, GAME_WIDTH - 80);
+	nep.y = 0 - (nep.h + 100);
+}
+
 void generate_rock(int x, int y)
 {
 	struct Object *lv;
@@ -170,31 +176,6 @@ void handle_game()
 	}
 
 	draw_image(bg, game.renderer);
-
-	if (game.up || game.down || game.left || game.right)
-	{
-		if (first_frame)
-		{
-			turbo1.x = player.x + 7;
-			turbo1.y = player.y + player.h;
-			draw_image(turbo1, game.renderer);
-			turbo1.x += 26;
-			draw_image(turbo1, game.renderer);
-			turbo1.x -= 26;
-			first_frame = 0;
-		}
-		else
-		{
-			first_frame = 1;
-			turbo2.x = player.x + 7;
-			turbo2.y = player.y + player.h;
-			draw_image(turbo2, game.renderer);
-			turbo2.x += 26;
-			draw_image(turbo2, game.renderer);
-			turbo2.x -= 26;
-		}
-	}
-
 	if (bg.y == 0)
 	{
 		bg.y = 0 - GAME_HEIGHT;
@@ -203,7 +184,6 @@ void handle_game()
 
 	if (rock_can_spawn)
 	{
-		printf("Generate\n");
 		generate_rock(generate_random_number(0, GAME_WIDTH), -38);
 		rock_can_spawn = 0;
 	}
@@ -214,10 +194,19 @@ void handle_game()
 		missile_can_spawn = 1;
 	}
 
-	if (rock_spawn_speed == LAVA_SPAWN_SPEED)
+	if (rock_spawn_speed == ROCK_SPAWN_SPEED)
 	{
 		rock_spawn_speed = 0;
 		rock_can_spawn = 1;
+	}
+
+	//draw_image(nep, game.renderer);
+	draw_image_scale(nep, game.renderer, 188, 188);
+	nep.y += NEP_SPEED;
+
+	if (nep.y > GAME_HEIGHT)
+	{
+		reset_nep();
 	}
 
 	missile_spawn_speed += 1;
@@ -227,7 +216,7 @@ void handle_game()
 
 	for (l = game.rock_head.next ; l != NULL ; l = l->next)
 	{
-		l->y += LAVA_SPEED;
+		l->y += ROCK_SPEED;
 
 		if (l->y > GAME_HEIGHT)
 		{
@@ -282,4 +271,28 @@ void handle_game()
 	}
 
 	draw_image(player, game.renderer);
+	if (game.up || game.down || game.left || game.right)
+	{
+		if (first_frame)
+		{
+			turbo1.x = player.x + 7;
+			turbo1.y = player.y + player.h;
+			draw_image(turbo1, game.renderer);
+			turbo1.x += 26;
+			draw_image(turbo1, game.renderer);
+			turbo1.x -= 26;
+			first_frame = 0;
+		}
+		else
+		{
+			first_frame = 1;
+			turbo2.x = player.x + 7;
+			turbo2.y = player.y + player.h;
+			draw_image(turbo2, game.renderer);
+			turbo2.x += 26;
+			draw_image(turbo2, game.renderer);
+			turbo2.x -= 26;
+		}
+	}
+
 }
