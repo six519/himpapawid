@@ -299,6 +299,15 @@ void handle_game()
 	lives_text = get_font_texture("Lives: ");
 	draw_text(score_text, 10, 5);
 	draw_text(lives_text, 10, 30);
+
+	rocket.x = 100;
+	rocket.y = 43;
+	for (int x=0; x < lives; x++)
+	{
+		draw_image(rocket, game.renderer);
+		rocket.x += 20;
+	}
+
 }
 
 SDL_Texture *get_font_texture(char *txt)

@@ -47,6 +47,7 @@ Sprite bg_title;
 Sprite missile;
 Sprite rock;
 Sprite nep;
+Sprite rocket;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -61,6 +62,8 @@ int missile_can_spawn;
 int missile_spawn_speed;
 int rock_can_spawn;
 int rock_spawn_speed;
+int score;
+int lives;
 
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game);
 void handle_game();
