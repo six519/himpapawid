@@ -15,6 +15,7 @@ Sprite turbo2;
 Sprite title;
 Sprite bg_title;
 Sprite missile;
+Sprite rock;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -24,6 +25,8 @@ int play_bg;
 int game_state;
 int missile_can_spawn;
 int missile_spawn_speed;
+int rock_can_spawn;
+int rock_spawn_speed;
 
 void exit_func()
 {
@@ -34,6 +37,7 @@ void exit_func()
 	SDL_DestroyTexture(title.texture);
 	SDL_DestroyTexture(bg_title.texture);
 	SDL_DestroyTexture(missile.texture);
+	SDL_DestroyTexture(rock.texture);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
 	SDL_Quit();
@@ -48,6 +52,8 @@ int main()
 	first_frame = 1;
 	missile_can_spawn = 1;
 	missile_spawn_speed = 0;
+	rock_can_spawn = 1;
+	rock_spawn_speed = 0;
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
@@ -91,6 +97,7 @@ int main()
 	init_image(&turbo1, game.renderer, 0, 0, "data/turbo1.png");
 	init_image(&turbo2, game.renderer, 0, 0, "data/turbo2.png");
 	init_image(&bg_title, game.renderer, 0, 40, "data/bg_title.jpg");
+	init_image(&rock, game.renderer, 0, 0, "data/rock.png");
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
@@ -98,8 +105,13 @@ int main()
 
 	init_image(&missile, game.renderer, 0, 0, "data/missile.png");
 	game.missile_tail = &game.missile_head;
+	game.rock_tail = &game.rock_head;
 
 	atexit(exit_func);
+
+	SDL_Point ls = get_image_size(rock);
+
+	generate_rocks();
 
 	while(1)
 	{

@@ -1,5 +1,21 @@
 #include "game.h"
 
+void generate_rocks()
+{
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
+}
+
 void handle_title()
 {
 	while (SDL_PollEvent(&game_event))
@@ -43,6 +59,22 @@ void generate_missile()
 	miss->y = player.y;
 }
 
+void generate_rock(int x, int y)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.rock_tail->next = lv;
+	game.rock_tail = lv;
+
+	SDL_Point p = get_image_size(rock);
+	int rn = generate_random_number(5, p.x);
+
+	lv->d = rn;
+	lv->x = x;
+	lv->y = y;
+}
+
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 {
 	if (event->repeat == 0)
@@ -76,7 +108,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Object *m, *prev;
+	struct Object *m, *prev, *l, *lprev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -138,7 +170,6 @@ void handle_game()
 	}
 
 	draw_image(bg, game.renderer);
-	draw_image(player, game.renderer);
 
 	if (game.up || game.down || game.left || game.right)
 	{
@@ -168,7 +199,14 @@ void handle_game()
 	{
 		bg.y = 0 - GAME_HEIGHT;
 	}
-	bg.y = bg.y + 1;
+	bg.y += BG_SPEED;
+
+	if (rock_can_spawn)
+	{
+		printf("Generate\n");
+		generate_rock(generate_random_number(0, GAME_WIDTH), -38);
+		rock_can_spawn = 0;
+	}
 
 	if (missile_spawn_speed == MISSILE_SPAWN_SPEED)
 	{
@@ -176,7 +214,44 @@ void handle_game()
 		missile_can_spawn = 1;
 	}
 
+	if (rock_spawn_speed == LAVA_SPAWN_SPEED)
+	{
+		rock_spawn_speed = 0;
+		rock_can_spawn = 1;
+	}
+
 	missile_spawn_speed += 1;
+	rock_spawn_speed += 1;
+
+	lprev = &game.rock_head;
+
+	for (l = game.rock_head.next ; l != NULL ; l = l->next)
+	{
+		l->y += LAVA_SPEED;
+
+		if (l->y > GAME_HEIGHT)
+		{
+			if (l == game.rock_tail)
+			{
+				game.rock_tail = lprev;
+			}
+
+			lprev->next = l->next;
+			free(l);
+			l = lprev;
+		}
+
+		lprev = l;
+	}
+
+	for (l = game.rock_head.next ; l != NULL ; l = l->next)
+	{
+		rock.x = l->x;
+		rock.y = l->y;
+		draw_image_scale(rock, game.renderer, l->d, l->d);
+		//draw_image(rock, game.renderer);
+	}
+
 
 	prev = &game.missile_head;
 
@@ -206,4 +281,5 @@ void handle_game()
 		draw_image(missile, game.renderer);
 	}
 
+	draw_image(player, game.renderer);
 }

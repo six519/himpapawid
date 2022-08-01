@@ -3,18 +3,23 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include "sprite.h"
+#include "misc.h"
 
 #define GAME_WIDTH 576
 #define GAME_HEIGHT 720
+#define BG_SPEED 3
 #define MISSILE_SPAWN_SPEED 20
+#define LAVA_SPAWN_SPEED 65
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
+#define LAVA_SPEED 1
 
 struct Object
 {
 	int x;
 	int y;
+	int d;
 	struct Object *next;
 };
 
@@ -27,7 +32,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Object missile_head, *missile_tail;
+	struct Object missile_head, *missile_tail, rock_head, *rock_tail;
 } Game;
 
 Game game;
@@ -38,6 +43,7 @@ Sprite turbo2;
 Sprite title;
 Sprite bg_title;
 Sprite missile;
+Sprite rock;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -47,10 +53,14 @@ int play_bg;
 int game_state;
 int missile_can_spawn;
 int missile_spawn_speed;
+int rock_can_spawn;
+int rock_spawn_speed;
 
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game);
 void handle_game();
 void handle_title();
 void generate_missile();
+void generate_rock(int x, int y);
+void generate_rocks();
 
 #endif
