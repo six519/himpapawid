@@ -181,8 +181,8 @@ void generate_bullet(int x, int y, int down_only, int go_right)
 	game.bullet_tail->next = lv;
 	game.bullet_tail = lv;
 	SDL_Point p = get_image_size(enemy_bullet);
-	lv->x = x + 5;
-	lv->y = y;
+	lv->x = x + 13;
+	lv->y = y + 20;
 	lv->down_only = down_only;
 	lv->go_right = go_right;
 }
