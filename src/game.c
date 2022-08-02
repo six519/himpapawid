@@ -16,6 +16,38 @@ void generate_rocks()
 	generate_rock(generate_random_number(0, GAME_WIDTH), generate_random_number(0, GAME_HEIGHT));
 }
 
+void handle_game_over()
+{
+	while (SDL_PollEvent(&game_event))
+	{
+		switch (game_event.type)
+		{
+			case SDL_QUIT:
+				exit(0);
+				break;
+			default:
+				break;
+		}
+	}	
+
+	draw_image(bg, game.renderer);
+	if (bg.y == 0)
+	{
+		bg.y = 0 - GAME_HEIGHT;
+	}
+	bg.y += BG_SPEED;
+
+	score_text = get_font_texture("Score:");
+	char *str = malloc(10);
+	sprintf(str, "%d", score);
+	score_value_text = get_font_texture(str);
+	draw_text(score_text, 10, 5);
+	draw_text(score_value_text, 100, 5);
+	free(str);
+
+	draw_image(game_over, game.renderer);
+}
+
 void handle_title()
 {
 	while (SDL_PollEvent(&game_event))
@@ -310,6 +342,11 @@ void handle_game()
 			al = aprev;
 			Mix_PlayChannel(-1, explode, 0);
 			lives -= 1;
+
+			if (lives == 0)
+			{
+				game_state = 2;
+			}
 		}
 
 		//check collision to missile

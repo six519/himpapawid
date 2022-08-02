@@ -27,6 +27,7 @@ Sprite explosion_3;
 Sprite explosion_4;
 Sprite explosion_5;
 Sprite enemy_bullet;
+Sprite game_over;
 Mix_Music *music;
 Mix_Chunk *shot;
 Mix_Chunk *explode;
@@ -68,6 +69,7 @@ void exit_func()
 	SDL_DestroyTexture(explosion_4.texture);
 	SDL_DestroyTexture(explosion_5.texture);
 	SDL_DestroyTexture(enemy_bullet.texture);
+	SDL_DestroyTexture(game_over.texture);
 	SDL_DestroyTexture(score_text);
 	SDL_DestroyTexture(score_value_text);
 	SDL_DestroyTexture(lives_text);
@@ -94,7 +96,7 @@ int main()
 	rock_can_spawn = 1;
 	rock_spawn_speed = 0;
 	score = 0;
-	lives = 5;
+	lives = 3;
 	printf("Himpapawid\n");
 	printf("Created By: Ferdinand Silva\n");
 	memset(&game, 0, sizeof(Game));
@@ -156,6 +158,9 @@ int main()
 	init_image(&explosion_4, game.renderer, 0, 0, "data/explosion_4.png");
 	init_image(&explosion_5, game.renderer, 0, 0, "data/explosion_5.png");
 	init_image(&enemy_bullet, game.renderer, 0, 0, "data/enemy_bullet.png");
+	init_image(&game_over, game.renderer, 0, 0, "data/game_over.png");
+	game_over.x = ((GAME_WIDTH / 2) - (game_over.w / 2));
+	game_over.y = (GAME_HEIGHT / 2) - (game_over.h / 2);	
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
@@ -183,6 +188,9 @@ int main()
 		{	
 		case 1:
 			handle_game();
+			break;
+		case 2:
+			handle_game_over();
 			break;	
 		default:
 			handle_title();
