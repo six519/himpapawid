@@ -10,12 +10,102 @@ void generate_rocks()
 
 void handle_game_over()
 {
+	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
 		{
 			case SDL_QUIT:
 				exit(0);
+				break;
+			case SDL_KEYDOWN:
+					if (game_event.key.repeat == 0)
+					{
+						if (game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
+						{
+							game_state = 0;
+							score = 0;
+							lives = 3;
+							title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
+							game.up = 0;
+							game.down = 0;
+							game.left = 0;
+							game.right = 0;
+							game.firing = 0;
+							player.x = (GAME_WIDTH / 2) - (player.w / 2);
+							player.y = GAME_HEIGHT - (player.h + 20);
+							prev = &game.missile_head;
+							for (m = game.missile_head.next ; m != NULL ; m = m->next)
+							{
+								if (m == game.missile_tail)
+								{
+									game.missile_tail = prev;
+								}
+
+								prev->next = m->next;
+								free(m);
+								m = prev;
+								prev = m;
+							}
+
+							lprev = &game.rock_head;
+							for (l = game.rock_head.next ; l != NULL ; l = l->next)
+							{
+								if (l == game.rock_tail)
+								{
+									game.rock_tail = lprev;
+								}
+
+								lprev->next = l->next;
+								free(l);
+								l = lprev;
+								lprev = l;
+							}
+
+							aprev = &game.alien_head;
+							for (al = game.alien_head.next ; al != NULL ; al = al->next)
+							{
+								if (al == game.alien_tail)
+								{
+									game.alien_tail = aprev;
+								}
+
+								aprev->next = al->next;
+								free(al);
+								al = aprev;
+								aprev = al;
+							}
+
+							eprev = &game.explosion_head;
+							for (al = game.explosion_head.next ; al != NULL ; al = al->next)
+							{
+								if (al == game.explosion_tail)
+								{
+									game.explosion_tail = eprev;
+								}
+
+								eprev->next = al->next;
+								free(al);
+								al = eprev;
+								eprev = al;
+							}
+
+							blprev = &game.bullet_head;
+							for (bl = game.bullet_head.next ; bl != NULL ; bl = bl->next)
+							{
+								if (bl == game.bullet_tail)
+								{
+									game.bullet_tail = blprev;
+								}
+
+								blprev->next = bl->next;
+								free(bl);
+								bl = blprev;
+								blprev = bl;
+							}
+							generate_rocks();
+						}	
+					}
 				break;
 			default:
 				break;
@@ -508,43 +598,6 @@ void handle_game()
 		eprev = al;
 	}
 
-	for (al = game.explosion_head.next ; al != NULL ; al = al->next)
-	{
-		switch (al->cf)
-		{
-		case 2 * 3:
-			explosion_2.x = al->x;
-			explosion_2.y = al->y;
-			//draw_image(explosion_2, game.renderer);
-			draw_image_scale(explosion_2, game.renderer, 32, 32);
-			break;
-		case 3 * 3:
-			explosion_3.x = al->x;
-			explosion_3.y = al->y;
-			//draw_image(explosion_3, game.renderer);
-			draw_image_scale(explosion_3, game.renderer, 32, 32);
-			break;
-		case 4 * 3:
-			explosion_4.x = al->x;
-			explosion_4.y = al->y;
-			//draw_image(explosion_4, game.renderer);
-			draw_image_scale(explosion_4, game.renderer, 32, 32);
-			break;
-		case 5 * 3:
-			explosion_5.x = al->x;
-			explosion_5.y = al->y;
-			//draw_image(explosion_5, game.renderer);
-			draw_image_scale(explosion_5, game.renderer, 32, 32);
-			break;
-		default:
-			explosion_1.x = al->x;
-			explosion_1.y = al->y;
-			//draw_image(explosion_1, game.renderer);
-			draw_image_scale(explosion_1, game.renderer, 32, 32);
-			break;
-		}
-	}
-
 	prev = &game.missile_head;
 
 	for (m = game.missile_head.next ; m != NULL ; m = m->next)
@@ -614,6 +667,43 @@ void handle_game()
 	{
 		draw_image(rocket, game.renderer);
 		rocket.x += 20;
+	}
+
+	for (al = game.explosion_head.next ; al != NULL ; al = al->next)
+	{
+		switch (al->cf)
+		{
+		case 2 * 3:
+			explosion_2.x = al->x;
+			explosion_2.y = al->y;
+			//draw_image(explosion_2, game.renderer);
+			draw_image_scale(explosion_2, game.renderer, 32, 32);
+			break;
+		case 3 * 3:
+			explosion_3.x = al->x;
+			explosion_3.y = al->y;
+			//draw_image(explosion_3, game.renderer);
+			draw_image_scale(explosion_3, game.renderer, 32, 32);
+			break;
+		case 4 * 3:
+			explosion_4.x = al->x;
+			explosion_4.y = al->y;
+			//draw_image(explosion_4, game.renderer);
+			draw_image_scale(explosion_4, game.renderer, 32, 32);
+			break;
+		case 5 * 3:
+			explosion_5.x = al->x;
+			explosion_5.y = al->y;
+			//draw_image(explosion_5, game.renderer);
+			draw_image_scale(explosion_5, game.renderer, 32, 32);
+			break;
+		default:
+			explosion_1.x = al->x;
+			explosion_1.y = al->y;
+			//draw_image(explosion_1, game.renderer);
+			draw_image_scale(explosion_1, game.renderer, 32, 32);
+			break;
+		}
 	}
 
 }
