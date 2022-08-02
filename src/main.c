@@ -19,6 +19,8 @@ Sprite missile;
 Sprite rock;
 Sprite nep;
 Sprite rocket;
+Sprite alien_1;
+Sprite alien_2;
 Mix_Music *music;
 Mix_Chunk *shot;
 TTF_Font *font;
@@ -34,6 +36,8 @@ int missile_can_spawn;
 int missile_spawn_speed;
 int rock_can_spawn;
 int rock_spawn_speed;
+int alien_can_spawn;
+int alien_spawn_speed;
 int score;
 int lives;
 
@@ -49,6 +53,8 @@ void exit_func()
 	SDL_DestroyTexture(rock.texture);
 	SDL_DestroyTexture(nep.texture);
 	SDL_DestroyTexture(rocket.texture);
+	SDL_DestroyTexture(alien_1.texture);
+	SDL_DestroyTexture(alien_2.texture);
 	SDL_DestroyTexture(score_text);
 	SDL_DestroyTexture(score_value_text);
 	SDL_DestroyTexture(lives_text);
@@ -67,6 +73,8 @@ int main()
 	first_frame = 1;
 	missile_can_spawn = 1;
 	missile_spawn_speed = 0;
+	alien_can_spawn = 0;
+	alien_spawn_speed = 0;
 	rock_can_spawn = 1;
 	rock_spawn_speed = 0;
 	score = 0;
@@ -123,6 +131,8 @@ int main()
 	init_image(&rock, game.renderer, 0, 0, "data/rock.png");
 	init_image(&nep, game.renderer, 0, 0, "data/nep.png");
 	init_image(&rocket, game.renderer, 0, 0, "data/rocket.png");
+	init_image(&alien_1, game.renderer, 0, 0, "data/alien_1.png");
+	init_image(&alien_2, game.renderer, 0, 0, "data/alien_2.png");
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
@@ -131,6 +141,7 @@ int main()
 	init_image(&missile, game.renderer, 0, 0, "data/missile.png");
 	game.missile_tail = &game.missile_head;
 	game.rock_tail = &game.rock_head;
+	game.alien_tail = &game.alien_head;
 
 	atexit(exit_func);
 

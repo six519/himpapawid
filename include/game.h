@@ -12,11 +12,13 @@
 #define BG_SPEED 3
 #define MISSILE_SPAWN_SPEED 20
 #define ROCK_SPAWN_SPEED 65
+#define ALIEN_SPAWN_SPEED 80
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
 #define ROCK_SPEED 2
 #define NEP_SPEED 1
+#define ALIEN_SPEED 4
 
 struct Object
 {
@@ -35,7 +37,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Object missile_head, *missile_tail, rock_head, *rock_tail;
+	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail;
 } Game;
 
 Game game;
@@ -49,6 +51,8 @@ Sprite missile;
 Sprite rock;
 Sprite nep;
 Sprite rocket;
+Sprite alien_1;
+Sprite alien_2;
 Mix_Music *music;
 Mix_Chunk *shot;
 SDL_Event game_event;
@@ -64,6 +68,8 @@ int missile_can_spawn;
 int missile_spawn_speed;
 int rock_can_spawn;
 int rock_spawn_speed;
+int alien_can_spawn;
+int alien_spawn_speed;
 int score;
 int lives;
 

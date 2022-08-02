@@ -81,6 +81,18 @@ void generate_rock(int x, int y)
 	lv->y = y;
 }
 
+void generate_alien(int x, int y)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.alien_tail->next = lv;
+	game.alien_tail = lv;
+	SDL_Point p = get_image_size(alien_1);
+	lv->x = x;
+	lv->y = y;
+}
+
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 {
 	if (event->repeat == 0)
@@ -114,7 +126,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Object *m, *prev, *l, *lprev;
+	struct Object *m, *prev, *l, *lprev, *al, *aprev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -188,6 +200,12 @@ void handle_game()
 		rock_can_spawn = 0;
 	}
 
+	if (alien_can_spawn)
+	{
+		generate_alien(generate_random_number(0, GAME_WIDTH), -16);
+		alien_can_spawn = 0;
+	}
+
 	if (missile_spawn_speed == MISSILE_SPAWN_SPEED)
 	{
 		missile_spawn_speed = 0;
@@ -198,6 +216,12 @@ void handle_game()
 	{
 		rock_spawn_speed = 0;
 		rock_can_spawn = 1;
+	}
+
+	if (alien_spawn_speed == ALIEN_SPAWN_SPEED)
+	{
+		alien_spawn_speed = 0;
+		alien_can_spawn = 1;
 	}
 
 	//draw_image(nep, game.renderer);
@@ -211,6 +235,7 @@ void handle_game()
 
 	missile_spawn_speed += 1;
 	rock_spawn_speed += 1;
+	alien_spawn_speed += 1;
 
 	lprev = &game.rock_head;
 
@@ -241,6 +266,33 @@ void handle_game()
 		//draw_image(rock, game.renderer);
 	}
 
+	aprev = &game.alien_head;
+
+	for (al = game.alien_head.next ; al != NULL ; al = al->next)
+	{
+		al->y += ALIEN_SPEED;
+
+		if (al->y > GAME_HEIGHT)
+		{
+			if (al == game.alien_tail)
+			{
+				game.alien_tail = aprev;
+			}
+
+			aprev->next = al->next;
+			free(al);
+			al = aprev;
+		}
+
+		aprev = al;
+	}
+
+	for (al = game.alien_head.next ; al != NULL ; al = al->next)
+	{
+		alien_1.x = al->x;
+		alien_1.y = al->y;
+		draw_image(alien_1, game.renderer);
+	}
 
 	prev = &game.missile_head;
 
