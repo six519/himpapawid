@@ -21,6 +21,12 @@ Sprite nep;
 Sprite rocket;
 Sprite alien_1;
 Sprite alien_2;
+Sprite explosion_1;
+Sprite explosion_2;
+Sprite explosion_3;
+Sprite explosion_4;
+Sprite explosion_5;
+Sprite enemy_bullet;
 Mix_Music *music;
 Mix_Chunk *shot;
 TTF_Font *font;
@@ -55,6 +61,12 @@ void exit_func()
 	SDL_DestroyTexture(rocket.texture);
 	SDL_DestroyTexture(alien_1.texture);
 	SDL_DestroyTexture(alien_2.texture);
+	SDL_DestroyTexture(explosion_1.texture);
+	SDL_DestroyTexture(explosion_2.texture);
+	SDL_DestroyTexture(explosion_3.texture);
+	SDL_DestroyTexture(explosion_4.texture);
+	SDL_DestroyTexture(explosion_5.texture);
+	SDL_DestroyTexture(enemy_bullet.texture);
 	SDL_DestroyTexture(score_text);
 	SDL_DestroyTexture(score_value_text);
 	SDL_DestroyTexture(lives_text);
@@ -133,6 +145,12 @@ int main()
 	init_image(&rocket, game.renderer, 0, 0, "data/rocket.png");
 	init_image(&alien_1, game.renderer, 0, 0, "data/alien_1.png");
 	init_image(&alien_2, game.renderer, 0, 0, "data/alien_2.png");
+	init_image(&explosion_1, game.renderer, 0, 0, "data/explosion_1.png");
+	init_image(&explosion_2, game.renderer, 0, 0, "data/explosion_2.png");
+	init_image(&explosion_3, game.renderer, 0, 0, "data/explosion_3.png");
+	init_image(&explosion_4, game.renderer, 0, 0, "data/explosion_4.png");
+	init_image(&explosion_5, game.renderer, 0, 0, "data/explosion_5.png");
+	init_image(&enemy_bullet, game.renderer, 0, 0, "data/enemy_bullet.png");
 
 	init_image(&title, game.renderer, 0, 0, "data/title.png");
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
