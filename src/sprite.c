@@ -58,3 +58,18 @@ void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *file
 	sprite->w = pnt.x;
 	sprite->h = pnt.y;
 }
+
+int is_collided(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
+{
+	int lower_x1 = x1 + w1 - 1;
+	int lower_y1 = y1 + h1 - 1;
+	int lower_x2 = x2 + w2  - 1;
+	int lower_y2 = y2 + h2 - 1;
+
+	if (lower_x1 < x2 || x1 > lower_x2 || lower_y1 < y2 || y1 > lower_y2) 
+	{
+		return 0;
+	}
+
+	return 1;
+}

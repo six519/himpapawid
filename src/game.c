@@ -151,7 +151,7 @@ void handle_game()
 		{
 			missile_can_spawn = 0;
 			generate_missile();
-			Mix_PlayChannel(0, shot, 0);
+			Mix_PlayChannel(-1, shot, 0);
 		}
 	}
 
@@ -282,6 +282,24 @@ void handle_game()
 			aprev->next = al->next;
 			free(al);
 			al = aprev;
+		}
+
+		//check collision to missile
+		for (m = game.missile_head.next ; m != NULL ; m = m->next)
+		{
+			if (is_collided(al->x, al->y, alien_1.w, alien_1.h, m->x, m->y, missile.w, missile.h))
+			{
+				if (al == game.alien_tail)
+				{
+					game.alien_tail = aprev;
+				}
+
+				aprev->next = al->next;
+				free(al);
+				al = aprev;
+				score += 5;
+				Mix_PlayChannel(-1, explode, 0);
+			}
 		}
 
 		aprev = al;

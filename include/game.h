@@ -12,7 +12,7 @@
 #define BG_SPEED 3
 #define MISSILE_SPAWN_SPEED 20
 #define ROCK_SPAWN_SPEED 65
-#define ALIEN_SPAWN_SPEED 80
+#define ALIEN_SPAWN_SPEED 70
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
@@ -61,6 +61,7 @@ Sprite explosion_5;
 Sprite enemy_bullet;
 Mix_Music *music;
 Mix_Chunk *shot;
+Mix_Chunk *explode;
 SDL_Event game_event;
 TTF_Font *font;
 SDL_Texture *score_text;

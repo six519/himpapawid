@@ -29,6 +29,7 @@ Sprite explosion_5;
 Sprite enemy_bullet;
 Mix_Music *music;
 Mix_Chunk *shot;
+Mix_Chunk *explode;
 TTF_Font *font;
 SDL_Event game_event;
 SDL_Texture *score_text;
@@ -72,6 +73,9 @@ void exit_func()
 	SDL_DestroyTexture(lives_text);
     SDL_DestroyRenderer(game.renderer);
     SDL_DestroyWindow(game.window);
+	Mix_FreeChunk(shot);
+	Mix_FreeChunk(explode);
+	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -127,6 +131,7 @@ int main()
 
 	music = Mix_LoadMUS("data/bg.mp3");
 	shot = Mix_LoadWAV("data/shot.wav");
+	explode = Mix_LoadWAV("data/explode.wav");
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);

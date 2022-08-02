@@ -17,5 +17,6 @@ void init_image(Sprite *sprite, SDL_Renderer *renderer, int x, int y, char *file
 void draw_image_scale(Sprite sprite, SDL_Renderer *renderer, int w,  int h);
 SDL_Point get_image_size(Sprite sprite);
 void draw_text(SDL_Texture *texture, int x, int y);
+int is_collided(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
 
 #endif
