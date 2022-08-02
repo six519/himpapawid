@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"sprite.h": "c"
+		"sprite.h": "c",
+		"__node_handle": "c"
 	}
 }

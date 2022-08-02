@@ -10,7 +10,7 @@ void generate_rocks()
 
 void handle_game_over()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev;
+	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -103,6 +103,35 @@ void handle_game_over()
 								bl = blprev;
 								blprev = bl;
 							}
+
+							al2prev = &game.alien2_head;
+							for (al2 = game.alien2_head.next ; al2 != NULL ; al2 = al2->next)
+							{
+								if (al2 == game.alien2_tail)
+								{
+									game.alien2_tail = al2prev;
+								}
+
+								al2prev->next = al2->next;
+								free(al2);
+								al2 = al2prev;
+								al2prev = al2;
+							}
+
+							e2prev = &game.explosion2_head;
+							for (al = game.explosion2_head.next ; al != NULL ; al = al->next)
+							{
+								if (al == game.explosion2_tail)
+								{
+									game.explosion2_tail = e2prev;
+								}
+
+								e2prev->next = al->next;
+								free(al);
+								al = e2prev;
+								e2prev = al;
+							}
+
 							generate_rocks();
 						}	
 					}
@@ -222,6 +251,22 @@ void generate_alien(int x, int y)
 	lv->y = y;
 }
 
+void generate_alien2(int x, int y)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.alien2_tail->next = lv;
+	game.alien2_tail = lv;
+	SDL_Point p = get_image_size(alien_2);
+	lv->lives = 3;
+	lv->change_direction = 0;
+	//lv->change_direction_speed = 100;
+	lv->down = 1;
+	lv->x = x;
+	lv->y = y;
+}
+
 void generate_explosion(int x, int y)
 {
 	struct Object *lv;
@@ -230,6 +275,18 @@ void generate_explosion(int x, int y)
 	game.explosion_tail->next = lv;
 	game.explosion_tail = lv;
 	SDL_Point p = get_image_size(explosion_1);
+	lv->x = x;
+	lv->y = y;
+}
+
+void generate_explosion2(int x, int y)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.explosion2_tail->next = lv;
+	game.explosion2_tail = lv;
+	SDL_Point p = get_image_size(ex1);
 	lv->x = x;
 	lv->y = y;
 }
@@ -267,7 +324,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev;
+	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -347,6 +404,12 @@ void handle_game()
 		alien_can_spawn = 0;
 	}
 
+	if (alien2_can_spawn)
+	{
+		generate_alien2(generate_random_number(0, GAME_WIDTH - alien_2.w), 0);
+		alien2_can_spawn = 0;
+	}
+
 	if (missile_spawn_speed == MISSILE_SPAWN_SPEED)
 	{
 		missile_spawn_speed = 0;
@@ -365,6 +428,12 @@ void handle_game()
 		alien_can_spawn = 1;
 	}
 
+	if (alien2_spawn_speed == ALIEN2_SPAWN_SPEED)
+	{
+		alien2_spawn_speed = 0;
+		alien2_can_spawn = 1;
+	}
+
 	//draw_image(nep, game.renderer);
 	draw_image_scale(nep, game.renderer, 188, 188);
 	nep.y += NEP_SPEED;
@@ -377,6 +446,7 @@ void handle_game()
 	missile_spawn_speed += 1;
 	rock_spawn_speed += 1;
 	alien_spawn_speed += 1;
+	alien2_spawn_speed += 1;
 
 	lprev = &game.rock_head;
 
@@ -405,6 +475,125 @@ void handle_game()
 		rock.y = l->y;
 		draw_image_scale(rock, game.renderer, l->d, l->d);
 		//draw_image(rock, game.renderer);
+	}
+
+	al2prev = &game.alien2_head;
+
+	for (al2 = game.alien2_head.next ; al2 != NULL ; al2 = al2->next)
+	{
+		al2->change_direction_speed += 1;
+
+		if (al2->change_direction_speed == CHANGE_DIRECTION_SPEED || (al2->y > (GAME_HEIGHT - alien_2.h) - 10 && al2->can_change_now) || (al2->y < 10 && al2->can_change_now) || (al2->x > (GAME_WIDTH - alien_2.w) - 10 && al2->can_change_now) || (al2->x < 10 && al2->can_change_now))
+		{
+			al2->can_change_now = 1;
+			al2->change_direction_speed = 0;
+			al2->up = 0;
+			al2->down = 0;
+			al2->left = 0;
+			al2->right =0;
+			int num = generate_random_number(0, 400);
+
+			if (num >= 0 && num <= 100)
+			{
+				al2->up = 1;
+			}
+			else if (num >= 101 && num <= 200)
+			{
+				al2->down = 1;
+			}
+			else if (num >= 201 && num <= 300)
+			{
+				al2->left = 1;
+			}
+			else
+			{
+				al2->right = 1;
+			}
+		}
+
+		if (al2->down)
+		{
+			al2->y += ALIEN2_SPEED;
+		}
+
+		if (al2->up)
+		{
+			al2->y -= ALIEN2_SPEED;
+		}
+
+		if (al2->left)
+		{
+			al2->x -= ALIEN2_SPEED;
+		}
+
+		if (al2->right)
+		{
+			al2->x += ALIEN2_SPEED;
+		}
+
+		//check collision to player
+		if (is_collided(al2->x, al2->y, alien_2.w, alien_2.h, player.x, player.y, player.w, player.h))
+		{
+			generate_explosion2(al2->x, al2->y);
+
+			if (al2 == game.alien2_tail)
+			{
+				game.alien2_tail = al2prev;
+			}
+
+			al2prev->next = al2->next;
+			free(al2);
+			al2 = al2prev;
+
+			Mix_PlayChannel(-1, explode, 0);
+			lives -= 1;
+
+			if (lives == 0)
+			{
+				game_state = 2;
+			}
+		}
+
+		//check collision to missile
+		prev = &game.missile_head;
+		for (m = game.missile_head.next ; m != NULL ; m = m->next)
+		{
+			if (is_collided(al2->x, al2->y, alien_2.w, alien_2.h, m->x, m->y, missile.w, missile.h))
+			{
+				generate_explosion2(al2->x, al2->y);
+				if (al2 == game.alien2_tail)
+				{
+					game.alien2_tail = al2prev;
+				}
+
+				al2prev->next = al2->next;
+				free(al2);
+				al2 = al2prev;
+				score += 5;
+				Mix_PlayChannel(-1, explode, 0);
+
+				if (m == game.missile_tail)
+				{
+					game.missile_tail = prev;
+				}
+
+				prev->next = m->next;
+				free(m);
+				m = prev;
+
+			}
+
+			prev = m;
+		}
+
+		al2prev = al2;
+	}
+
+	for (al2 = game.alien2_head.next ; al2 != NULL ; al2 = al2->next)
+	{
+		alien_2.x = al2->x;
+		alien_2.y = al2->y;
+		draw_image(alien_2, game.renderer);
 	}
 
 	aprev = &game.alien_head;
@@ -598,6 +787,26 @@ void handle_game()
 		eprev = al;
 	}
 
+	e2prev = &game.explosion2_head;
+
+	for (al = game.explosion2_head.next ; al != NULL ; al = al->next)
+	{
+		al->cf += 1;
+		if (al->cf == (7 * 3) + 1)
+		{
+			if (al == game.explosion2_tail)
+			{
+				game.explosion2_tail = e2prev;
+			}
+
+			e2prev->next = al->next;
+			free(al);
+			al = e2prev;
+		}
+
+		e2prev = al;
+	}
+
 	prev = &game.missile_head;
 
 	for (m = game.missile_head.next ; m != NULL ; m = m->next)
@@ -702,6 +911,48 @@ void handle_game()
 			explosion_1.y = al->y;
 			//draw_image(explosion_1, game.renderer);
 			draw_image_scale(explosion_1, game.renderer, 32, 32);
+			break;
+		}
+	}
+
+	for (al = game.explosion2_head.next ; al != NULL ; al = al->next)
+	{
+		switch (al->cf)
+		{
+		case 2 * 3:
+			ex2.x = al->x;
+			ex2.y = al->y;
+			draw_image(ex2, game.renderer);
+			break;
+		case 3 * 3:
+			ex3.x = al->x;
+			ex3.y = al->y;
+			draw_image(ex3, game.renderer);
+			break;
+		case 4 * 3:
+			ex4.x = al->x;
+			ex4.y = al->y;
+			draw_image(ex4, game.renderer);
+			break;
+		case 5 * 3:
+			ex5.x = al->x;
+			ex5.y = al->y;
+			draw_image(ex5, game.renderer);
+			break;
+		case 6 * 3:
+			ex6.x = al->x;
+			ex6.y = al->y;
+			draw_image(ex6, game.renderer);
+			break;
+		case 7 * 3:
+			ex7.x = al->x;
+			ex7.y = al->y;
+			draw_image(ex7, game.renderer);
+			break;
+		default:
+			ex1.x = al->x;
+			ex1.y = al->y;
+			draw_image(ex1, game.renderer);
 			break;
 		}
 	}

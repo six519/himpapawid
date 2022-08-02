@@ -13,14 +13,17 @@
 #define MISSILE_SPAWN_SPEED 20
 #define ROCK_SPAWN_SPEED 65
 #define ALIEN_SPAWN_SPEED 50
-#define BULLET_SPAWN_SPEED 52
+#define ALIEN2_SPAWN_SPEED 300
+#define BULLET_SPAWN_SPEED 30
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
 #define ROCK_SPEED 2
 #define NEP_SPEED 1
 #define ALIEN_SPEED 4
+#define ALIEN2_SPEED 6
 #define BULLET_SPEED 5
+#define CHANGE_DIRECTION_SPEED 70
 
 struct Object
 {
@@ -32,6 +35,14 @@ struct Object
 	int go_right;
 	int bsp; //bullet spawn time
 	int sp; //spawn bullet
+	int up;
+	int down;
+	int left;
+	int right;
+	int change_direction_speed;
+	int change_direction;
+	int can_change_now;
+	int lives;
 	struct Object *next;
 };
 
@@ -44,7 +55,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail, explosion_head, *explosion_tail, bullet_head, *bullet_tail;
+	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail, explosion_head, *explosion_tail, bullet_head, *bullet_tail, alien2_head, *alien2_tail, explosion2_head, *explosion2_tail;
 } Game;
 
 Game game;
@@ -93,6 +104,8 @@ int rock_can_spawn;
 int rock_spawn_speed;
 int alien_can_spawn;
 int alien_spawn_speed;
+int alien2_can_spawn;
+int alien2_spawn_speed;
 int score;
 int lives;
 
@@ -106,6 +119,9 @@ void generate_rocks();
 void reset_nep();
 SDL_Texture *get_font_texture(char *txt);
 void generate_explosion(int x, int y);
+void generate_explosion2(int x, int y);
 void generate_bullet(int x, int y, int down_only, int go_right);
+void generate_alien(int x, int y);
+void generate_alien2(int x, int y);
 
 #endif

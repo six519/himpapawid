@@ -54,6 +54,8 @@ int rock_can_spawn;
 int rock_spawn_speed;
 int alien_can_spawn;
 int alien_spawn_speed;
+int alien2_can_spawn;
+int alien2_spawn_speed;
 int score;
 int lives;
 
@@ -109,6 +111,8 @@ int main()
 	missile_spawn_speed = 0;
 	alien_can_spawn = 0;
 	alien_spawn_speed = 0;
+	alien2_can_spawn = 0;
+	alien2_spawn_speed = 0;
 	rock_can_spawn = 1;
 	rock_spawn_speed = 0;
 	score = 0;
@@ -197,6 +201,8 @@ int main()
 	game.alien_tail = &game.alien_head;
 	game.explosion_tail = &game.explosion_head;
 	game.bullet_tail = &game.bullet_head;
+	game.alien2_tail = &game.alien2_head;
+	game.explosion2_tail = &game.explosion2_head;
 
 	atexit(exit_func);
 
