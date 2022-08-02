@@ -161,10 +161,11 @@ int main()
 	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
 	title.y = (GAME_HEIGHT / 2) - (title.h / 2);
 
-	init_image(&missile, game.renderer, 0, 0, "data/missile.png");
+	init_image(&missile, game.renderer, 0, 0, "data/missile_2.png");
 	game.missile_tail = &game.missile_head;
 	game.rock_tail = &game.rock_head;
 	game.alien_tail = &game.alien_head;
+	game.explosion_tail = &game.explosion_head;
 
 	atexit(exit_func);
 

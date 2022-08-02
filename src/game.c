@@ -55,7 +55,7 @@ void generate_missile()
 	memset(miss, 0, sizeof(struct Object));
 	game.missile_tail->next = miss;
 	game.missile_tail = miss;
-	miss->x = player.x + 20;
+	miss->x = player.x + 16;
 	miss->y = player.y;
 }
 
@@ -93,6 +93,18 @@ void generate_alien(int x, int y)
 	lv->y = y;
 }
 
+void generate_explosion(int x, int y)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.explosion_tail->next = lv;
+	game.explosion_tail = lv;
+	SDL_Point p = get_image_size(explosion_1);
+	lv->x = x;
+	lv->y = y;
+}
+
 void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 {
 	if (event->repeat == 0)
@@ -126,7 +138,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev;
+	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -285,10 +297,12 @@ void handle_game()
 		}
 
 		//check collision to missile
+		prev = &game.missile_head;
 		for (m = game.missile_head.next ; m != NULL ; m = m->next)
 		{
 			if (is_collided(al->x, al->y, alien_1.w, alien_1.h, m->x, m->y, missile.w, missile.h))
 			{
+				generate_explosion(al->x, al->y);
 				if (al == game.alien_tail)
 				{
 					game.alien_tail = aprev;
@@ -299,7 +313,19 @@ void handle_game()
 				al = aprev;
 				score += 5;
 				Mix_PlayChannel(-1, explode, 0);
+
+				if (m == game.missile_tail)
+				{
+					game.missile_tail = prev;
+				}
+
+				prev->next = m->next;
+				free(m);
+				m = prev;
+
 			}
+
+			prev = m;
 		}
 
 		aprev = al;
@@ -310,6 +336,63 @@ void handle_game()
 		alien_1.x = al->x;
 		alien_1.y = al->y;
 		draw_image(alien_1, game.renderer);
+	}
+
+	eprev = &game.explosion_head;
+
+	for (al = game.explosion_head.next ; al != NULL ; al = al->next)
+	{
+		al->cf += 1;
+		if (al->cf == (5 * 3) + 1)
+		{
+			if (al == game.explosion_tail)
+			{
+				game.explosion_tail = eprev;
+			}
+
+			eprev->next = al->next;
+			free(al);
+			al = eprev;
+		}
+
+		eprev = al;
+	}
+
+	for (al = game.explosion_head.next ; al != NULL ; al = al->next)
+	{
+		switch (al->cf)
+		{
+		case 2 * 3:
+			explosion_2.x = al->x;
+			explosion_2.y = al->y;
+			//draw_image(explosion_2, game.renderer);
+			draw_image_scale(explosion_2, game.renderer, 32, 32);
+			break;
+		case 3 * 3:
+			explosion_3.x = al->x;
+			explosion_3.y = al->y;
+			//draw_image(explosion_3, game.renderer);
+			draw_image_scale(explosion_3, game.renderer, 32, 32);
+			break;
+		case 4 * 3:
+			explosion_4.x = al->x;
+			explosion_4.y = al->y;
+			//draw_image(explosion_4, game.renderer);
+			draw_image_scale(explosion_4, game.renderer, 32, 32);
+			break;
+		case 5 * 3:
+			explosion_5.x = al->x;
+			explosion_5.y = al->y;
+			//draw_image(explosion_5, game.renderer);
+			draw_image_scale(explosion_5, game.renderer, 32, 32);
+			break;
+		default:
+			explosion_1.x = al->x;
+			explosion_1.y = al->y;
+			//draw_image(explosion_1, game.renderer);
+			draw_image_scale(explosion_1, game.renderer, 32, 32);
+			break;
+		}
 	}
 
 	prev = &game.missile_head;

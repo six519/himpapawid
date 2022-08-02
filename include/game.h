@@ -12,7 +12,7 @@
 #define BG_SPEED 3
 #define MISSILE_SPAWN_SPEED 20
 #define ROCK_SPAWN_SPEED 65
-#define ALIEN_SPAWN_SPEED 70
+#define ALIEN_SPAWN_SPEED 50
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
 #define PLAYER_SPEED 4
@@ -25,6 +25,7 @@ struct Object
 	int x;
 	int y;
 	int d;
+	int cf; //current frame
 	struct Object *next;
 };
 
@@ -37,7 +38,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail;
+	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail, explosion_head, *explosion_tail;
 } Game;
 
 Game game;
@@ -88,5 +89,6 @@ void generate_rock(int x, int y);
 void generate_rocks();
 void reset_nep();
 SDL_Texture *get_font_texture(char *txt);
+void generate_explosion(int x, int y);
 
 #endif
