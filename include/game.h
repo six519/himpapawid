@@ -69,6 +69,7 @@ Sprite enemy_bullet;
 Sprite game_over;
 Mix_Music *music;
 Mix_Chunk *shot;
+Mix_Chunk *plasma;
 Mix_Chunk *explode;
 SDL_Event game_event;
 TTF_Font *font;

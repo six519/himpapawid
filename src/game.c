@@ -353,6 +353,7 @@ void handle_game()
 				}
 
 				generate_bullet(al->x, al->y, down_only, go_right);
+				Mix_PlayChannel(-1, plasma, 0);
 			}
 		} 
 		else 

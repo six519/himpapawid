@@ -30,6 +30,7 @@ Sprite enemy_bullet;
 Sprite game_over;
 Mix_Music *music;
 Mix_Chunk *shot;
+Mix_Chunk *plasma;
 Mix_Chunk *explode;
 TTF_Font *font;
 SDL_Event game_event;
@@ -77,6 +78,7 @@ void exit_func()
     SDL_DestroyWindow(game.window);
 	Mix_FreeChunk(shot);
 	Mix_FreeChunk(explode);
+	Mix_FreeChunk(plasma);
 	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
@@ -133,6 +135,7 @@ int main()
 
 	music = Mix_LoadMUS("data/bg.mp3");
 	shot = Mix_LoadWAV("data/shot.wav");
+	plasma = Mix_LoadWAV("data/plasma.wav");
 	explode = Mix_LoadWAV("data/explode.wav");
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
