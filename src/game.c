@@ -296,6 +296,22 @@ void handle_game()
 			al = aprev;
 		}
 
+		//check collision to player
+		if (is_collided(al->x, al->y, alien_1.w, alien_1.h, player.x, player.y, player.w, player.h))
+		{
+			generate_explosion(al->x, al->y);
+			if (al == game.alien_tail)
+			{
+				game.alien_tail = aprev;
+			}
+
+			aprev->next = al->next;
+			free(al);
+			al = aprev;
+			Mix_PlayChannel(-1, explode, 0);
+			lives -= 1;
+		}
+
 		//check collision to missile
 		prev = &game.missile_head;
 		for (m = game.missile_head.next ; m != NULL ; m = m->next)
