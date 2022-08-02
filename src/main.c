@@ -171,6 +171,7 @@ int main()
 	game.rock_tail = &game.rock_head;
 	game.alien_tail = &game.alien_head;
 	game.explosion_tail = &game.explosion_head;
+	game.bullet_tail = &game.bullet_head;
 
 	atexit(exit_func);
 

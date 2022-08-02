@@ -91,6 +91,20 @@ void generate_missile()
 	miss->y = player.y;
 }
 
+void generate_bullet(int x, int y, int down_only, int go_right)
+{
+	struct Object *lv;
+	lv = malloc(sizeof(struct Object));
+	memset(lv, 0, sizeof(struct Object));
+	game.bullet_tail->next = lv;
+	game.bullet_tail = lv;
+	SDL_Point p = get_image_size(enemy_bullet);
+	lv->x = x + 5;
+	lv->y = y;
+	lv->down_only = down_only;
+	lv->go_right = go_right;
+}
+
 void reset_nep()
 {
 	nep.x = generate_random_number(-100, GAME_WIDTH - 80);
@@ -121,6 +135,7 @@ void generate_alien(int x, int y)
 	game.alien_tail->next = lv;
 	game.alien_tail = lv;
 	SDL_Point p = get_image_size(alien_1);
+	lv->sp = 1;
 	lv->x = x;
 	lv->y = y;
 }
@@ -170,7 +185,7 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 
 void handle_game()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev;
+	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -316,6 +331,35 @@ void handle_game()
 	{
 		al->y += ALIEN_SPEED;
 
+		if (al->bsp == BULLET_SPAWN_SPEED)
+		{
+			if (al->sp)
+			{
+		
+				al->sp = 0;
+				int down_only = 0;
+				int checker = generate_random_number(0, 200);
+
+				if (checker > 100)
+				{
+					down_only = 1;
+				}
+
+				int go_right = 0;
+
+				if(player.x > al->x)
+				{
+					go_right = 1;
+				}
+
+				generate_bullet(al->x, al->y, down_only, go_right);
+			}
+		} 
+		else 
+		{
+			al->bsp += 1;
+		}
+
 		if (al->y > GAME_HEIGHT)
 		{
 			if (al == game.alien_tail)
@@ -389,6 +433,66 @@ void handle_game()
 		alien_1.x = al->x;
 		alien_1.y = al->y;
 		draw_image(alien_1, game.renderer);
+	}
+
+	blprev = &game.bullet_head;
+
+	for (bl = game.bullet_head.next ; bl != NULL ; bl = bl->next)
+	{
+		
+		bl->y += BULLET_SPEED;
+
+		if (!bl->down_only)
+		{
+			if (bl->go_right)
+			{
+				bl->x += 1;
+			} else {
+				bl->x -= 1;
+			}
+		}
+
+		if (bl->y > GAME_HEIGHT || bl->x > GAME_WIDTH || bl->x < 0)
+		{
+			if (bl == game.bullet_tail)
+			{
+				game.bullet_tail = blprev;
+			}
+
+			blprev->next = bl->next;
+			free(bl);
+			bl = blprev;
+		}
+
+		//check collision to player
+		if (is_collided(bl->x, bl->y, enemy_bullet.w, enemy_bullet.h, player.x, player.y, player.w, player.h))
+		{
+			generate_explosion(bl->x, bl->y);
+			if (bl == game.bullet_tail)
+			{
+				game.bullet_tail = blprev;
+			}
+
+			blprev->next = bl->next;
+			free(bl);
+			bl = blprev;
+			Mix_PlayChannel(-1, explode, 0);
+			lives -= 1;
+
+			if (lives == 0)
+			{
+				game_state = 2;
+			}
+		}
+
+		blprev = bl;
+	}
+
+	for (bl = game.bullet_head.next ; bl != NULL ; bl = bl->next)
+	{
+		enemy_bullet.x = bl->x;
+		enemy_bullet.y = bl->y;
+		draw_image(enemy_bullet, game.renderer);
 	}
 
 	eprev = &game.explosion_head;
