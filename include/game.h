@@ -125,5 +125,6 @@ void generate_alien(int x, int y);
 void generate_alien2(int x, int y);
 void clear_object(struct Object *head, struct Object **tail);
 void draw_bg();
+void set_speed(int *can_spawn, int *spawn_speed, int speed);
 
 #endif

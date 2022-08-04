@@ -254,6 +254,15 @@ void handle_key(SDL_KeyboardEvent *event, int value, Game *game)
 	}
 }
 
+void set_speed(int *can_spawn, int *spawn_speed, int speed)
+{
+	if (*spawn_speed == speed)
+	{
+		*spawn_speed = 0;
+		*can_spawn = 1;
+	}
+}
+
 void handle_game()
 {
 	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
@@ -337,29 +346,10 @@ void handle_game()
 		alien2_can_spawn = 0;
 	}
 
-	if (missile_spawn_speed == MISSILE_SPAWN_SPEED)
-	{
-		missile_spawn_speed = 0;
-		missile_can_spawn = 1;
-	}
-
-	if (rock_spawn_speed == ROCK_SPAWN_SPEED)
-	{
-		rock_spawn_speed = 0;
-		rock_can_spawn = 1;
-	}
-
-	if (alien_spawn_speed == ALIEN_SPAWN_SPEED)
-	{
-		alien_spawn_speed = 0;
-		alien_can_spawn = 1;
-	}
-
-	if (alien2_spawn_speed == ALIEN2_SPAWN_SPEED)
-	{
-		alien2_spawn_speed = 0;
-		alien2_can_spawn = 1;
-	}
+	set_speed(&missile_can_spawn, &missile_spawn_speed, MISSILE_SPAWN_SPEED);
+	set_speed(&rock_can_spawn, &rock_spawn_speed, ROCK_SPAWN_SPEED);
+	set_speed(&alien_can_spawn, &alien_spawn_speed, ALIEN_SPAWN_SPEED);
+	set_speed(&alien2_can_spawn, &alien2_spawn_speed, ALIEN2_SPAWN_SPEED);
 
 	//draw_image(nep, game.renderer);
 	draw_image_scale(nep, game.renderer, 188, 188);
