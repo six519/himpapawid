@@ -1,5 +1,15 @@
 #include "game.h"
 
+void draw_bg()
+{
+	draw_image(bg, game.renderer);
+	if (bg.y == 0)
+	{
+		bg.y = 0 - GAME_HEIGHT;
+	}
+	bg.y += BG_SPEED;
+}
+
 void generate_rocks()
 {
 	for (int x=0; x < 12; x++)
@@ -8,9 +18,26 @@ void generate_rocks()
 	}
 }
 
+void clear_object(struct Object *head, struct Object **tail)
+{
+	struct Object *m, *prev;
+	prev = head;
+	for (m = head->next ; m != NULL ; m = m->next)
+	{
+		if (m == *tail)
+		{
+			*tail = prev;
+		}
+
+		prev->next = m->next;
+		free(m);
+		m = prev;
+		prev = m;
+	}
+}
+
 void handle_game_over()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)
@@ -34,104 +61,14 @@ void handle_game_over()
 							game.firing = 0;
 							player.x = (GAME_WIDTH / 2) - (player.w / 2);
 							player.y = GAME_HEIGHT - (player.h + 20);
-							prev = &game.missile_head;
-							for (m = game.missile_head.next ; m != NULL ; m = m->next)
-							{
-								if (m == game.missile_tail)
-								{
-									game.missile_tail = prev;
-								}
 
-								prev->next = m->next;
-								free(m);
-								m = prev;
-								prev = m;
-							}
-
-							lprev = &game.rock_head;
-							for (l = game.rock_head.next ; l != NULL ; l = l->next)
-							{
-								if (l == game.rock_tail)
-								{
-									game.rock_tail = lprev;
-								}
-
-								lprev->next = l->next;
-								free(l);
-								l = lprev;
-								lprev = l;
-							}
-
-							aprev = &game.alien_head;
-							for (al = game.alien_head.next ; al != NULL ; al = al->next)
-							{
-								if (al == game.alien_tail)
-								{
-									game.alien_tail = aprev;
-								}
-
-								aprev->next = al->next;
-								free(al);
-								al = aprev;
-								aprev = al;
-							}
-
-							eprev = &game.explosion_head;
-							for (al = game.explosion_head.next ; al != NULL ; al = al->next)
-							{
-								if (al == game.explosion_tail)
-								{
-									game.explosion_tail = eprev;
-								}
-
-								eprev->next = al->next;
-								free(al);
-								al = eprev;
-								eprev = al;
-							}
-
-							blprev = &game.bullet_head;
-							for (bl = game.bullet_head.next ; bl != NULL ; bl = bl->next)
-							{
-								if (bl == game.bullet_tail)
-								{
-									game.bullet_tail = blprev;
-								}
-
-								blprev->next = bl->next;
-								free(bl);
-								bl = blprev;
-								blprev = bl;
-							}
-
-							al2prev = &game.alien2_head;
-							for (al2 = game.alien2_head.next ; al2 != NULL ; al2 = al2->next)
-							{
-								if (al2 == game.alien2_tail)
-								{
-									game.alien2_tail = al2prev;
-								}
-
-								al2prev->next = al2->next;
-								free(al2);
-								al2 = al2prev;
-								al2prev = al2;
-							}
-
-							e2prev = &game.explosion2_head;
-							for (al = game.explosion2_head.next ; al != NULL ; al = al->next)
-							{
-								if (al == game.explosion2_tail)
-								{
-									game.explosion2_tail = e2prev;
-								}
-
-								e2prev->next = al->next;
-								free(al);
-								al = e2prev;
-								e2prev = al;
-							}
-
+							clear_object(&game.missile_head, &game.missile_tail);
+							clear_object(&game.rock_head, &game.rock_tail);
+							clear_object(&game.alien_head, &game.alien_tail);
+							clear_object(&game.explosion_head, &game.explosion_tail);
+							clear_object(&game.bullet_head, &game.bullet_tail);
+							clear_object(&game.alien2_head, &game.alien2_tail);
+							clear_object(&game.explosion2_head, &game.explosion2_tail);
 							generate_rocks();
 						}	
 					}
@@ -141,12 +78,7 @@ void handle_game_over()
 		}
 	}	
 
-	draw_image(bg, game.renderer);
-	if (bg.y == 0)
-	{
-		bg.y = 0 - GAME_HEIGHT;
-	}
-	bg.y += BG_SPEED;
+	draw_bg();
 
 	score_text = get_font_texture("Score:");
 	char *str = malloc(10);
@@ -385,12 +317,7 @@ void handle_game()
 		}
 	}
 
-	draw_image(bg, game.renderer);
-	if (bg.y == 0)
-	{
-		bg.y = 0 - GAME_HEIGHT;
-	}
-	bg.y += BG_SPEED;
+	draw_bg();
 
 	if (rock_can_spawn)
 	{

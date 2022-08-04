@@ -123,5 +123,7 @@ void generate_explosion2(int x, int y);
 void generate_bullet(int x, int y, int down_only, int go_right);
 void generate_alien(int x, int y);
 void generate_alien2(int x, int y);
+void clear_object(struct Object *head, struct Object **tail);
+void draw_bg();
 
 #endif
