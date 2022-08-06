@@ -3,11 +3,7 @@
 void draw_bg()
 {
 	draw_image(bg, game.renderer);
-	if (bg.y == 0)
-	{
-		bg.y = 0 - GAME_HEIGHT;
-	}
-	bg.y += BG_SPEED;
+	bg.y = (bg.y == 0)? 0 - GAME_HEIGHT : bg.y + BG_SPEED;
 }
 
 void generate_rocks()
