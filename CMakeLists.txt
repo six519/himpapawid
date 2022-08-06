@@ -4,7 +4,9 @@ include(FindPackageHandleStandardArgs)
 
 project(Himpapawid)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}")
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 find_package(SDL2 2.0 REQUIRED)
 find_package(SDL2_mixer 2.0 REQUIRED)

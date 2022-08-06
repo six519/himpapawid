@@ -18,6 +18,25 @@ void generate_rocks()
 	}
 }
 
+void draw_common(struct Object *head, Sprite *sprite, int is_scaled)
+{
+	struct Object *m;
+	for (m = head->next ; m != NULL ; m = m->next)
+	{
+		sprite->x = m->x;
+		sprite->y = m->y;
+
+		if (is_scaled)
+		{
+			draw_image_scale(*sprite, game.renderer, m->d, m->d);
+		}
+		else
+		{
+			draw_image(*sprite, game.renderer);
+		}
+	}
+}
+
 void clear_object(struct Object *head, struct Object **tail)
 {
 	struct Object *m, *prev;
@@ -386,13 +405,7 @@ void handle_game()
 		lprev = l;
 	}
 
-	for (l = game.rock_head.next ; l != NULL ; l = l->next)
-	{
-		rock.x = l->x;
-		rock.y = l->y;
-		draw_image_scale(rock, game.renderer, l->d, l->d);
-		//draw_image(rock, game.renderer);
-	}
+	draw_common(&game.rock_head, &rock, 1);
 
 	al2prev = &game.alien2_head;
 
@@ -506,12 +519,7 @@ void handle_game()
 		al2prev = al2;
 	}
 
-	for (al2 = game.alien2_head.next ; al2 != NULL ; al2 = al2->next)
-	{
-		alien_2.x = al2->x;
-		alien_2.y = al2->y;
-		draw_image(alien_2, game.renderer);
-	}
+	draw_common(&game.alien2_head, &alien_2, 0);
 
 	aprev = &game.alien_head;
 
@@ -617,12 +625,7 @@ void handle_game()
 		aprev = al;
 	}
 
-	for (al = game.alien_head.next ; al != NULL ; al = al->next)
-	{
-		alien_1.x = al->x;
-		alien_1.y = al->y;
-		draw_image(alien_1, game.renderer);
-	}
+	draw_common(&game.alien_head, &alien_1, 0);
 
 	blprev = &game.bullet_head;
 
@@ -677,12 +680,7 @@ void handle_game()
 		blprev = bl;
 	}
 
-	for (bl = game.bullet_head.next ; bl != NULL ; bl = bl->next)
-	{
-		enemy_bullet.x = bl->x;
-		enemy_bullet.y = bl->y;
-		draw_image(enemy_bullet, game.renderer);
-	}
+	draw_common(&game.bullet_head, &enemy_bullet, 0);
 
 	eprev = &game.explosion_head;
 
@@ -745,12 +743,7 @@ void handle_game()
 		prev = m;
 	}
 
-	for (m = game.missile_head.next ; m != NULL ; m = m->next)
-	{
-		missile.x = m->x;
-		missile.y = m->y;
-		draw_image(missile, game.renderer);
-	}
+	draw_common(&game.missile_head, &missile, 0);
 
 	draw_image(player, game.renderer);
 	if (game.up || game.down || game.left || game.right)
