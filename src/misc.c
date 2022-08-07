@@ -5,7 +5,7 @@
 void print_error(const char *str, const char *err)
 {
 	printf(str, err);
-	exit(0);
+	exit(EXIT_FAILURE);
 }
 
 int generate_random_number(int min, int max)
