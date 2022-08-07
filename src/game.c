@@ -113,12 +113,9 @@ void handle_title()
 				exit(0);
 				break;
 			case SDL_KEYDOWN:
-					if (game_event.key.repeat == 0)
+					if (game_event.key.repeat == 0 && game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
-						if (game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
-						{
-							game_state = 1;
-						}	
+						game_state = 1;
 					}
 				break;
 			default:
