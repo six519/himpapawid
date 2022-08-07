@@ -61,31 +61,28 @@ void handle_game_over()
 				exit(0);
 				break;
 			case SDL_KEYDOWN:
-					if (game_event.key.repeat == 0)
+					if (game_event.key.repeat == 0 && game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
-						if (game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
-						{
-							game_state = 0;
-							score = 0;
-							lives = 3;
-							title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
-							game.up = 0;
-							game.down = 0;
-							game.left = 0;
-							game.right = 0;
-							game.firing = 0;
-							player.x = (GAME_WIDTH / 2) - (player.w / 2);
-							player.y = GAME_HEIGHT - (player.h + 20);
+						game_state = 0;
+						score = 0;
+						lives = 3;
+						title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
+						game.up = 0;
+						game.down = 0;
+						game.left = 0;
+						game.right = 0;
+						game.firing = 0;
+						player.x = (GAME_WIDTH / 2) - (player.w / 2);
+						player.y = GAME_HEIGHT - (player.h + 20);
 
-							clear_object(&game.missile_head, &game.missile_tail);
-							clear_object(&game.rock_head, &game.rock_tail);
-							clear_object(&game.alien_head, &game.alien_tail);
-							clear_object(&game.explosion_head, &game.explosion_tail);
-							clear_object(&game.bullet_head, &game.bullet_tail);
-							clear_object(&game.alien2_head, &game.alien2_tail);
-							clear_object(&game.explosion2_head, &game.explosion2_tail);
-							generate_rocks();
-						}	
+						clear_object(&game.missile_head, &game.missile_tail);
+						clear_object(&game.rock_head, &game.rock_tail);
+						clear_object(&game.alien_head, &game.alien_tail);
+						clear_object(&game.explosion_head, &game.explosion_tail);
+						clear_object(&game.bullet_head, &game.bullet_tail);
+						clear_object(&game.alien2_head, &game.alien2_tail);
+						clear_object(&game.explosion2_head, &game.explosion2_tail);
+						generate_rocks();
 					}
 				break;
 			default:
