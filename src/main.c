@@ -7,6 +7,9 @@
 #include "misc.h"
 #include "sprite.h"
 #include "game.h"
+#ifdef __EMSCRIPTEN__
+#include "emscripten.h"
+#endif
 
 Game game;
 Sprite player;
@@ -61,6 +64,9 @@ int lives;
 
 void exit_func()
 {
+#ifdef __EMSCRIPTEN__
+    emscripten_cancel_main_loop();
+#endif
 	SDL_DestroyTexture(player.texture);
 	SDL_DestroyTexture(bg.texture);
 	SDL_DestroyTexture(turbo1.texture);
@@ -100,6 +106,40 @@ void exit_func()
 	SDL_Quit();
 }
 
+void game_loop()
+{
+	SDL_SetRenderDrawColor(game.renderer, 112, 176, 203, 255); //light blue
+	SDL_RenderClear(game.renderer);
+
+	switch (game_state)
+	{	
+	case 1:
+		handle_game();
+		break;
+	case 2:
+		handle_game_over();
+		break;	
+	default:
+		handle_title();
+		break;
+	}
+
+	SDL_RenderPresent(game.renderer);
+
+#ifdef __EMSCRIPTEN__
+	emscripten_sleep(10);
+#else
+	SDL_Delay(18);
+#endif
+	loaded = 1;
+
+	if (!play_bg)
+	{
+		Mix_PlayMusic(music, -1);
+		play_bg = 1;
+	}
+}
+
 int main()
 {
 	srand(time(NULL));
@@ -126,7 +166,11 @@ int main()
 	game.right = 0;
 	game.firing = 0;
 
+#ifdef __EMSCRIPTEN__
+	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0)
+#else
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+#endif
 	{
 		print_error("Unable to initialize SDL: %s.\n", SDL_GetError());
 	}
@@ -151,7 +195,7 @@ int main()
 
 	Mix_AllocateChannels(SND_CHANNEL);
 
-	music = Mix_LoadMUS("data/bg.mp3");
+	music = Mix_LoadMUS("data/bg.ogg");
 	shot = Mix_LoadWAV("data/shot.wav");
 	plasma = Mix_LoadWAV("data/plasma.wav");
 	explode = Mix_LoadWAV("data/explode.wav");
@@ -211,34 +255,14 @@ int main()
 	generate_rocks();
 	reset_nep();
 
+#ifdef __EMSCRIPTEN__
+	emscripten_set_main_loop(game_loop, 0, 1);
+#else
 	while(1)
 	{
-		SDL_SetRenderDrawColor(game.renderer, 112, 176, 203, 255); //light blue
-		SDL_RenderClear(game.renderer);
-
-		switch (game_state)
-		{	
-		case 1:
-			handle_game();
-			break;
-		case 2:
-			handle_game_over();
-			break;	
-		default:
-			handle_title();
-			break;
-		}
-
-		SDL_RenderPresent(game.renderer);
-		SDL_Delay(18);
-		loaded = 1;
-
-		if (!play_bg)
-		{
-			Mix_PlayMusic(music, -1);
-			play_bg = 1;
-		}
+		game_loop();
 	}
+#endif
 
 	return EXIT_SUCCESS;
 }
