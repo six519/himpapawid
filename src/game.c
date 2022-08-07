@@ -293,46 +293,31 @@ void handle_game()
 		}
 	}
 
-	if (game.firing)
+	if (game.firing && missile_can_spawn)
 	{
-		if (missile_can_spawn)
-		{
-			missile_can_spawn = 0;
-			generate_missile();
-			Mix_PlayChannel(-1, shot, 0);
-		}
+		missile_can_spawn = 0;
+		generate_missile();
+		Mix_PlayChannel(-1, shot, 0);
 	}
 
-	if (game.up)
+	if (game.up && player.y > 0)
 	{
-		if (player.y > 0)
-		{
-			player.y -= PLAYER_SPEED;
-		}
+		player.y -= PLAYER_SPEED;
 	}
 
-	if (game.down)
+	if (game.down && player.y < (GAME_HEIGHT - player.h))
 	{
-		if (player.y < (GAME_HEIGHT - player.h))
-		{
-			player.y += PLAYER_SPEED;
-		}
+		player.y += PLAYER_SPEED;
 	}
 
-	if (game.right)
+	if (game.right && player.x < GAME_WIDTH - player.w)
 	{
-		if (player.x < GAME_WIDTH - player.w)
-		{
-			player.x += PLAYER_SPEED;
-		}
+		player.x += PLAYER_SPEED;
 	}
 
-	if (game.left)
+	if (game.left && player.x > 0)
 	{
-		if (player.x > 0)
-		{
-			player.x -= PLAYER_SPEED;
-		}
+		player.x -= PLAYER_SPEED;
 	}
 
 	draw_bg();
