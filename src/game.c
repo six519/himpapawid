@@ -14,9 +14,9 @@ void generate_rocks()
 	}
 }
 
-void draw_common(struct Object *head, Sprite *sprite, int is_scaled)
+void draw_common(Object *head, Sprite *sprite, int is_scaled)
 {
-	struct Object *m;
+	Object *m;
 	for (m = head->next ; m != NULL ; m = m->next)
 	{
 		sprite->x = m->x;
@@ -33,9 +33,9 @@ void draw_common(struct Object *head, Sprite *sprite, int is_scaled)
 	}
 }
 
-void clear_object(struct Object *head, struct Object **tail)
+void clear_object(Object *head, Object **tail)
 {
-	struct Object *m, *prev;
+	Object *m, *prev;
 	prev = head;
 	for (m = head->next ; m != NULL ; m = m->next)
 	{
@@ -134,9 +134,9 @@ void handle_title()
 
 void generate_missile()
 {
-	struct Object *miss;
-	miss = malloc(sizeof(struct Object));
-	memset(miss, 0, sizeof(struct Object));
+	Object *miss;
+	miss = malloc(sizeof(Object));
+	memset(miss, 0, sizeof(Object));
 	game.missile_tail->next = miss;
 	game.missile_tail = miss;
 	miss->x = player.x + 16;
@@ -145,9 +145,9 @@ void generate_missile()
 
 void generate_bullet(int x, int y, int down_only, int go_right)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.bullet_tail->next = lv;
 	game.bullet_tail = lv;
 	SDL_Point p = get_image_size(enemy_bullet);
@@ -165,9 +165,9 @@ void reset_nep()
 
 void generate_rock(int x, int y)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.rock_tail->next = lv;
 	game.rock_tail = lv;
 
@@ -181,9 +181,9 @@ void generate_rock(int x, int y)
 
 void generate_alien(int x, int y)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.alien_tail->next = lv;
 	game.alien_tail = lv;
 	SDL_Point p = get_image_size(alien_1);
@@ -194,9 +194,9 @@ void generate_alien(int x, int y)
 
 void generate_alien2(int x, int y)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.alien2_tail->next = lv;
 	game.alien2_tail = lv;
 	SDL_Point p = get_image_size(alien_2);
@@ -210,9 +210,9 @@ void generate_alien2(int x, int y)
 
 void generate_explosion(int x, int y)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.explosion_tail->next = lv;
 	game.explosion_tail = lv;
 	SDL_Point p = get_image_size(explosion_1);
@@ -222,9 +222,9 @@ void generate_explosion(int x, int y)
 
 void generate_explosion2(int x, int y)
 {
-	struct Object *lv;
-	lv = malloc(sizeof(struct Object));
-	memset(lv, 0, sizeof(struct Object));
+	Object *lv;
+	lv = malloc(sizeof(Object));
+	memset(lv, 0, sizeof(Object));
 	game.explosion2_tail->next = lv;
 	game.explosion2_tail = lv;
 	SDL_Point p = get_image_size(ex1);
@@ -274,7 +274,7 @@ void set_speed(int *can_spawn, int *spawn_speed, int speed)
 
 void handle_game()
 {
-	struct Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
+	Object *m, *prev, *l, *lprev, *al, *aprev, *el, *eprev, *bl, *blprev, *al2, *al2prev, *e2prev;
 	while (SDL_PollEvent(&game_event))
 	{
 		switch (game_event.type)

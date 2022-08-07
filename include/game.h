@@ -25,7 +25,7 @@
 #define BULLET_SPEED 5
 #define CHANGE_DIRECTION_SPEED 70
 
-struct Object
+typedef struct Obj
 {
 	int x;
 	int y;
@@ -43,8 +43,8 @@ struct Object
 	int change_direction;
 	int can_change_now;
 	int lives;
-	struct Object *next;
-};
+	struct Obj *next;
+} Object;
 
 typedef struct
 {
@@ -55,7 +55,7 @@ typedef struct
 	int left;
 	int right;
 	int firing;
-	struct Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail, explosion_head, *explosion_tail, bullet_head, *bullet_tail, alien2_head, *alien2_tail, explosion2_head, *explosion2_tail;
+	Object missile_head, *missile_tail, rock_head, *rock_tail, alien_head, *alien_tail, explosion_head, *explosion_tail, bullet_head, *bullet_tail, alien2_head, *alien2_tail, explosion2_head, *explosion2_tail;
 } Game;
 
 extern Game game;
@@ -123,9 +123,9 @@ void generate_explosion2(int x, int y);
 void generate_bullet(int x, int y, int down_only, int go_right);
 void generate_alien(int x, int y);
 void generate_alien2(int x, int y);
-void clear_object(struct Object *head, struct Object **tail);
+void clear_object(Object *head, Object **tail);
 void draw_bg();
 void set_speed(int *can_spawn, int *spawn_speed, int speed);
-void draw_common(struct Object *head, Sprite *sprite, int is_scaled);
+void draw_common(Object *head, Sprite *sprite, int is_scaled);
 
 #endif
