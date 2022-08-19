@@ -202,6 +202,9 @@ int main()
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
+#ifdef __ANDROID__
+	SDL_RenderSetLogicalSize(game.renderer, GAME_WIDTH, GAME_HEIGHT);
+#endif
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
 	init_image(&player, game.renderer, 0, 0, "data/ship_1.png");
