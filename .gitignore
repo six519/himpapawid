@@ -1,6 +1,7 @@
 .DS_Store
 bin/
 temp/
+obj/local
 
 # Gradle files
 .gradle/
