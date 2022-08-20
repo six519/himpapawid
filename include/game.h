@@ -17,13 +17,26 @@
 #define BULLET_SPAWN_SPEED 30
 #define SND_CHANNEL 4
 #define MISSILE_SPEED 8
-#define PLAYER_SPEED 4
 #define ROCK_SPEED 2
 #define NEP_SPEED 1
 #define ALIEN_SPEED 4
 #define ALIEN2_SPEED 6
 #define BULLET_SPEED 5
 #define CHANGE_DIRECTION_SPEED 70
+
+#ifdef __ANDROID__
+#include <android/log.h>
+
+#define  LOG_TAG    "Himpapawid"
+
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#define  LOGW(...)  __android_log_print(ANDROID_LOG_WARN,LOG_TAG,__VA_ARGS__)
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define PLAYER_SPEED 6
+#else
+#define PLAYER_SPEED 4
+#endif
 
 typedef struct Obj
 {
@@ -94,6 +107,12 @@ extern TTF_Font *font;
 extern SDL_Texture *score_text;
 extern SDL_Texture *lives_text;
 extern SDL_Texture *score_value_text;
+#ifdef __ANDROID__
+extern SDL_Rect screen_rect;
+extern SDL_Point touch_location;
+extern int finger_y;
+extern int finger_x;
+#endif
 extern int first_frame;
 extern int loaded;
 extern int play_bg;
@@ -127,5 +146,6 @@ void clear_object(Object *head, Object **tail);
 void draw_bg();
 void set_speed(int *can_spawn, int *spawn_speed, int speed);
 void draw_common(Object *head, Sprite *sprite, int is_scaled);
+void back_to_title();
 
 #endif

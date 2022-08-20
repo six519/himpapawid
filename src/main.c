@@ -47,6 +47,12 @@ SDL_Event game_event;
 SDL_Texture *score_text;
 SDL_Texture *score_value_text;
 SDL_Texture *lives_text;
+#ifdef __ANDROID__
+SDL_Rect screen_rect;
+SDL_Point touch_location;
+int finger_y;
+int finger_x;
+#endif
 int first_frame;
 int loaded;
 int play_bg;
@@ -108,7 +114,13 @@ void exit_func()
 
 void game_loop()
 {
+#ifdef __ANDROID__
+	SDL_Rect screen_rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+	SDL_Point touch_location = { screen_rect.w / 2, screen_rect.h / 2 };
+	SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255); //black on mobile
+#else
 	SDL_SetRenderDrawColor(game.renderer, 112, 176, 203, 255); //light blue
+#endif
 	SDL_RenderClear(game.renderer);
 
 	switch (game_state)
@@ -164,7 +176,6 @@ int main()
 	game.down = 0;
 	game.left = 0;
 	game.right = 0;
-	game.firing = 0;
 
 #ifdef __EMSCRIPTEN__
 	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0)
@@ -175,8 +186,23 @@ int main()
 		print_error("Unable to initialize SDL: %s.\n", SDL_GetError());
 	}
 
-	game.window = SDL_CreateWindow(TITLE_VERSION, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, GAME_WIDTH, GAME_HEIGHT, 0);
+#ifdef __ANDROID__
+	finger_x = 0;
+	finger_y = 0;
 
+	SDL_DisplayMode mode;
+	if( SDL_GetCurrentDisplayMode( 0, &mode ) == 0 )
+	{
+		screen_rect.w = mode.w;
+		screen_rect.h = mode.h;
+	}
+
+	game.firing = 1; //always firing on mobile
+	game.window = SDL_CreateWindow(TITLE_VERSION, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screen_rect.w, screen_rect.h, 0);
+#else
+	game.firing = 0;
+	game.window = SDL_CreateWindow(TITLE_VERSION, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, GAME_WIDTH, GAME_HEIGHT, 0);
+#endif
 	if(!game.window)
 	{
 		print_error("Unable to create window: %s.\n", SDL_GetError());

@@ -51,6 +51,34 @@ void clear_object(Object *head, Object **tail)
 	}
 }
 
+void back_to_title()
+{
+	game_state = 0;
+	score = 0;
+	lives = 3;
+	title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
+	game.up = 0;
+	game.down = 0;
+	game.left = 0;
+	game.right = 0;
+#ifdef __ANDROID__
+	game.firing = 1;
+#else
+	game.firing = 0;
+#endif
+	player.x = (GAME_WIDTH / 2) - (player.w / 2);
+	player.y = GAME_HEIGHT - (player.h + 20);
+
+	clear_object(&game.missile_head, &game.missile_tail);
+	clear_object(&game.rock_head, &game.rock_tail);
+	clear_object(&game.alien_head, &game.alien_tail);
+	clear_object(&game.explosion_head, &game.explosion_tail);
+	clear_object(&game.bullet_head, &game.bullet_tail);
+	clear_object(&game.alien2_head, &game.alien2_tail);
+	clear_object(&game.explosion2_head, &game.explosion2_tail);
+	generate_rocks();
+}
+
 void handle_game_over()
 {
 	while (SDL_PollEvent(&game_event))
@@ -63,28 +91,14 @@ void handle_game_over()
 			case SDL_KEYDOWN:
 					if (game_event.key.repeat == 0 && game_event.key.keysym.scancode == SDL_SCANCODE_RETURN)
 					{
-						game_state = 0;
-						score = 0;
-						lives = 3;
-						title.x = ((GAME_WIDTH / 2) - (title.w / 2)) - title.w;
-						game.up = 0;
-						game.down = 0;
-						game.left = 0;
-						game.right = 0;
-						game.firing = 0;
-						player.x = (GAME_WIDTH / 2) - (player.w / 2);
-						player.y = GAME_HEIGHT - (player.h + 20);
-
-						clear_object(&game.missile_head, &game.missile_tail);
-						clear_object(&game.rock_head, &game.rock_tail);
-						clear_object(&game.alien_head, &game.alien_tail);
-						clear_object(&game.explosion_head, &game.explosion_tail);
-						clear_object(&game.bullet_head, &game.bullet_tail);
-						clear_object(&game.alien2_head, &game.alien2_tail);
-						clear_object(&game.explosion2_head, &game.explosion2_tail);
-						generate_rocks();
+						back_to_title();
 					}
 				break;
+#ifdef __ANDROID__
+			case SDL_FINGERDOWN:
+					back_to_title();
+				break;
+#endif
 			default:
 				break;
 		}
@@ -118,6 +132,11 @@ void handle_title()
 						game_state = 1;
 					}
 				break;
+#ifdef __ANDROID__
+			case SDL_FINGERDOWN:
+					game_state = 1;
+				break;
+#endif
 			default:
 				break;
 		}
@@ -288,6 +307,70 @@ void handle_game()
 			case SDL_KEYUP:
 				handle_key(&game_event.key, 0, &game);
 				break;
+#ifdef __ANDROID__
+			case SDL_FINGERDOWN:
+				touch_location.x = game_event.tfinger.x * screen_rect.w;
+				touch_location.y = game_event.tfinger.y * screen_rect.h;
+				finger_x = touch_location.x;
+				finger_y = touch_location.y;			
+				break;
+			case SDL_FINGERUP:
+				touch_location.x = game_event.tfinger.x * screen_rect.w;
+				touch_location.y = game_event.tfinger.y * screen_rect.h;
+				finger_x = 0;
+				finger_y = 0;
+				game.up = 0;
+				game.down = 0;
+				game.left = 0;
+				game.right = 0;
+				break;
+			case SDL_FINGERMOTION:
+				touch_location.x = game_event.tfinger.x * screen_rect.w;
+				touch_location.y = game_event.tfinger.y * screen_rect.h;
+				
+				LOGI("Start X: %d", finger_x);
+				LOGI("Start Y: %d", finger_y);
+				LOGI("Current X: %d", touch_location.x);
+				LOGI("Current Y: %d", touch_location.y);
+
+				if (finger_y > touch_location.y + 100 && !game.up)
+				{
+					game.up = 1;
+					game.down = 0;
+					game.left = 0;
+					game.right = 0;
+					finger_y = touch_location.y;
+				}
+
+				if (finger_y < touch_location.y - 100 && !game.down)
+				{
+					game.down = 1;
+					game.up = 0;
+					game.left = 0;
+					game.right = 0;
+					finger_y = touch_location.y;
+				}
+
+				if (finger_x > touch_location.x + 100 && !game.left)
+				{
+					game.left = 1;
+					game.right = 0;
+					game.up = 0;
+					game.down = 0;
+					finger_x = touch_location.x;
+				}
+
+				if (finger_x < touch_location.x - 100 && !game.right)
+				{
+					game.right = 1;
+					game.left = 0;
+					game.up = 0;
+					game.down = 0;
+					finger_x = touch_location.x;
+				}
+
+				break;
+#endif
 			default:
 				break;
 		}
