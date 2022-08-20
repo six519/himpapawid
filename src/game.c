@@ -333,7 +333,7 @@ void handle_game()
 				LOGI("Current X: %d", touch_location.x);
 				LOGI("Current Y: %d", touch_location.y);
 
-				if (finger_y > touch_location.y + 100 && !game.up)
+				if (finger_y > touch_location.y + 50 && !game.up)
 				{
 					game.up = 1;
 					game.down = 0;
@@ -342,7 +342,7 @@ void handle_game()
 					finger_y = touch_location.y;
 				}
 
-				if (finger_y < touch_location.y - 100 && !game.down)
+				if (finger_y < touch_location.y - 50 && !game.down)
 				{
 					game.down = 1;
 					game.up = 0;
@@ -351,7 +351,7 @@ void handle_game()
 					finger_y = touch_location.y;
 				}
 
-				if (finger_x > touch_location.x + 100 && !game.left)
+				if (finger_x > touch_location.x + 50 && !game.left)
 				{
 					game.left = 1;
 					game.right = 0;
@@ -360,7 +360,7 @@ void handle_game()
 					finger_x = touch_location.x;
 				}
 
-				if (finger_x < touch_location.x - 100 && !game.right)
+				if (finger_x < touch_location.x - 50 && !game.right)
 				{
 					game.right = 1;
 					game.left = 0;
